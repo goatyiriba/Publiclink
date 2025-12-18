@@ -5,6 +5,23 @@
  * This file contains all configuration constants for the Wespee web interface
  */
 
+// Load .env file if it exists (for non-Replit hosting)
+$envFile = __DIR__ . '/.env';
+if (file_exists($envFile)) {
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) continue;
+        if (strpos($line, '=') !== false) {
+            list($key, $value) = explode('=', $line, 2);
+            $key = trim($key);
+            $value = trim($value);
+            if (!getenv($key)) {
+                putenv("$key=$value");
+            }
+        }
+    }
+}
+
 // API Configuration - Load from environment variables
 define('API_BASE_URL', getenv('API_BASE_URL') ?: 'https://recorder-wespee-api.bicentsafe.com/api/v1');
 define('API_CLIENT_ID', getenv('API_CLIENT_ID') ?: '');
