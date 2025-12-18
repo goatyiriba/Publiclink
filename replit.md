@@ -1,0 +1,46 @@
+# Wespee Profile Web Interface
+
+## Overview
+Public web interface for Wespee user profiles, accessible via `/<username>`. This serves as a fallback when users open deep links in a browser instead of the mobile app.
+
+## Tech Stack
+- **Backend**: PHP 8.2
+- **Frontend**: HTML5, Tailwind CSS (CDN), Vanilla JavaScript
+- **QR Code**: QRCode.js library (CDN)
+- **API**: Wespee REST API (external)
+
+## Project Structure
+```
+/
+├── index.php          # Main entry point - profile display
+├── 404.php            # Error page for non-existent users
+├── config.php         # Configuration constants (API, branding)
+├── router.php         # URL rewriting router for PHP built-in server
+├── assets/
+│   ├── css/styles.css # Custom styles
+│   ├── fonts/         # Athletics font family
+│   ├── images/        # Logo, icons, etc.
+│   └── js/app.js      # Frontend JavaScript
+└── README.md          # Original documentation
+```
+
+## Running the Project
+The project runs on PHP's built-in development server with `router.php` handling URL rewrites:
+```bash
+php -S 0.0.0.0:5000 router.php
+```
+
+## URL Patterns
+- `/<username>` - Shows user profile page
+- `/` - Redirects to main Wespee site
+- Non-existent users show 404 page
+
+## API Integration
+The app connects to an external Wespee API to fetch user profiles. API credentials are in `config.php`.
+
+## Configuration
+Key settings in `config.php`:
+- API credentials (CLIENT_ID, CLIENT_SECRET)
+- Site branding colors
+- Social media links
+- App store URLs (iOS/Android)
