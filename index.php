@@ -145,9 +145,10 @@ $qrCodeData = $profile['qrCode'] ?? ''; // QR code is now provided by API as bas
 $deepLink = 'https://asset.wespee.me/' . $username; // Deep link format
 
 // Meta tags for SEO and social sharing
-$pageTitle = '@' . $username . ' - ' . SITE_NAME;
-$pageDescription = 'Envoyez de l\'argent à @' . $username . ' sur ' . SITE_NAME;
-$ogImage = !empty($profilePictureUrl) ? $profilePictureUrl : SITE_URL . '/assets/images/default-avatar.png';
+$pageTitle = 'Payez-moi sur ' . SITE_NAME;
+$pageDescription = 'Envoyez et recevez de l\'argent instantanément avec ' . SITE_NAME;
+$ogImageParams = !empty($profilePictureUrl) ? '?avatar=' . urlencode($profilePictureUrl) : '';
+$ogImage = SITE_URL . '/og-image/' . $username . $ogImageParams;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -163,14 +164,16 @@ $ogImage = !empty($profilePictureUrl) ? $profilePictureUrl : SITE_URL . '/assets
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="profile">
     <meta property="og:url" content="<?php echo $profileUrl; ?>">
-    <meta property="og:title" content="<?php echo $fullName; ?> (@<?php echo $username; ?>)">
+    <meta property="og:title" content="<?php echo $pageTitle; ?>">
     <meta property="og:description" content="<?php echo $pageDescription; ?>">
     <meta property="og:image" content="<?php echo $ogImage; ?>">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
 
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="<?php echo $profileUrl; ?>">
-    <meta name="twitter:title" content="<?php echo $fullName; ?>">
+    <meta name="twitter:title" content="<?php echo $pageTitle; ?>">
     <meta name="twitter:description" content="<?php echo $pageDescription; ?>">
     <meta name="twitter:image" content="<?php echo $ogImage; ?>">
 

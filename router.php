@@ -20,6 +20,11 @@ if ($uri === '/' || $uri === '') {
     // No username provided, let index.php handle it
     $_GET['username'] = '';
     require 'index.php';
+} elseif (preg_match('/^\/og-image\/([a-zA-Z0-9_]+)$/', $uri, $matches)) {
+    // OG Image generation route
+    $_GET['username'] = $matches[1];
+    $_GET['avatar'] = isset($_GET['avatar']) ? $_GET['avatar'] : '';
+    require 'og-image.php';
 } elseif (preg_match('/^\/([a-zA-Z0-9_]+)$/', $uri, $matches)) {
     // Username found in URL
     $_GET['username'] = $matches[1];
