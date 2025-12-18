@@ -18,6 +18,43 @@ if (empty($username)) {
 
 $avatarUrl = isset($_GET['avatar']) ? $_GET['avatar'] : '';
 $initials = strtoupper(substr($username, 0, 2));
+$fullName = '';
+
+if (empty($avatarUrl)) {
+    $apiUrl = API_BASE_URL . '/users/' . urlencode($username) . '/profile';
+    $ctx = stream_context_create([
+        'http' => [
+            'method' => 'GET',
+            'header' => [
+                'Accept: application/json',
+                'X-Client-Id: ' . API_CLIENT_ID,
+                'X-Client-Secret: ' . API_CLIENT_SECRET,
+            ],
+            'timeout' => 5,
+        ],
+        'ssl' => [
+            'verify_peer' => true,
+        ],
+    ]);
+    
+    $response = @file_get_contents($apiUrl, false, $ctx);
+    if ($response !== false) {
+        $data = json_decode($response, true);
+        if (isset($data['profilePictureUrl']) && !empty($data['profilePictureUrl'])) {
+            $avatarUrl = $data['profilePictureUrl'];
+        }
+        if (isset($data['firstName']) || isset($data['lastName'])) {
+            $firstName = $data['firstName'] ?? '';
+            $lastName = $data['lastName'] ?? '';
+            $fullName = trim($firstName . ' ' . $lastName);
+            if (!empty($firstName) && !empty($lastName)) {
+                $initials = strtoupper(substr($firstName, 0, 1) . substr($lastName, 0, 1));
+            } elseif (!empty($firstName)) {
+                $initials = strtoupper(substr($firstName, 0, 2));
+            }
+        }
+    }
+}
 
 function isValidAvatarUrl($url) {
     if (empty($url)) {
@@ -172,9 +209,9 @@ imagecopy($canvas, $avatarCanvas, $avatarX, $avatarY, 0, 0, $avatarSize, $avatar
 imagedestroy($avatarCanvas);
 
 $badgeText = '@' . $username;
-$badgeFontSize = 32;
-$badgePaddingX = 30;
-$badgePaddingY = 15;
+$badgeFontSize = 42;
+$badgePaddingX = 35;
+$badgePaddingY = 18;
 $badgeY = $avatarY + $avatarSize + 40;
 
 $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
