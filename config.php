@@ -5,10 +5,10 @@
  * This file contains all configuration constants for the Wespee web interface
  */
 
-// API Configuration
-define('API_BASE_URL', 'https://recorder-wespee-api.bicentsafe.com/api/v1');
-define('API_CLIENT_ID', 'a2f43234317d8ebb28a810660d4ba73ed6d42adb7f1c75820e693cd88595a03d');
-define('API_CLIENT_SECRET', 'df809470293b2ca6d5d135560deb6b3e5fbb000e160cf6d8cffe35acf657af10b4f792d5a2bc8e62ed0919d0164b183c038da34969cf256ca20154b6936950c9');
+// API Configuration - Load from environment variables
+define('API_BASE_URL', getenv('API_BASE_URL') ?: 'https://recorder-wespee-api.bicentsafe.com/api/v1');
+define('API_CLIENT_ID', getenv('API_CLIENT_ID') ?: '');
+define('API_CLIENT_SECRET', getenv('API_CLIENT_SECRET') ?: '');
 
 // App Store URLs (to be configured)
 define('IOS_APP_STORE_URL', ''); // TODO: Add iOS App Store URL

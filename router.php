@@ -11,8 +11,21 @@ ob_start();
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 // Serve static files directly
-if (preg_match('/\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/', $uri)) {
+if (preg_match('/\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|otf)$/', $uri)) {
     return false; // Serve the file directly
+}
+
+// Block direct access to PHP files (security)
+if (preg_match('/\.php$/', $uri) && $uri !== '/') {
+    http_response_code(403);
+    exit('Access denied');
+}
+
+// Serve robots.txt
+if ($uri === '/robots.txt') {
+    header('Content-Type: text/plain');
+    readfile(__DIR__ . '/robots.txt');
+    exit;
 }
 
 // Extract username from URI

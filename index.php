@@ -158,6 +158,7 @@ $ogImage = SITE_URL . '/og-image/' . $username . $ogImageParams;
     <title><?php echo $pageTitle; ?></title>
 
     <!-- SEO Meta Tags -->
+    <meta name="robots" content="noindex, nofollow">
     <meta name="description" content="<?php echo $pageDescription; ?>">
     <meta name="author" content="<?php echo SITE_NAME; ?>">
 
