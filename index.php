@@ -162,21 +162,28 @@ $ogImage = SITE_URL . '/og-image/' . $username . $ogImageParams;
     <meta name="description" content="<?php echo $pageDescription; ?>">
     <meta name="author" content="<?php echo SITE_NAME; ?>">
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
     <meta property="og:type" content="profile">
+    <meta property="og:site_name" content="<?php echo SITE_NAME; ?>">
     <meta property="og:url" content="<?php echo $profileUrl; ?>">
     <meta property="og:title" content="<?php echo $pageTitle; ?>">
     <meta property="og:description" content="<?php echo $pageDescription; ?>">
     <meta property="og:image" content="<?php echo $ogImage; ?>">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:image:secure_url" content="<?php echo $ogImage; ?>">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="2400">
+    <meta property="og:image:height" content="1260">
+    <meta property="og:image:alt" content="Profil <?php echo SITE_NAME; ?> de @<?php echo $username; ?>">
+    <meta property="og:locale" content="fr_FR">
 
-    <!-- Twitter -->
+    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@wespee">
     <meta name="twitter:url" content="<?php echo $profileUrl; ?>">
     <meta name="twitter:title" content="<?php echo $pageTitle; ?>">
     <meta name="twitter:description" content="<?php echo $pageDescription; ?>">
     <meta name="twitter:image" content="<?php echo $ogImage; ?>">
+    <meta name="twitter:image:alt" content="Profil <?php echo SITE_NAME; ?> de @<?php echo $username; ?>">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
