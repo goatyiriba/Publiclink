@@ -140,7 +140,7 @@ $username = htmlspecialchars($profile['username']);
 $displayName = ucfirst($username); // Capitalize first letter
 $profilePictureUrl = htmlspecialchars($profile['profilePictureUrl']);
 $initials = getInitials($username);
-$profileUrl = $profile['publicProfileUrl'] ?? (SITE_URL . '/' . $username);
+$profileUrl = SITE_URL . '/' . $username;
 $qrCodeData = $profile['qrCode'] ?? ''; // QR code is now provided by API as base64
 $deepLink = 'https://asset.wespee.me/' . $username; // Deep link format
 

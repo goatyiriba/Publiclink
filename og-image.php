@@ -75,6 +75,7 @@ function isValidAvatarUrl($url) {
         'wespee.me',
         'asset.wespee.me',
         'bicentsafe.com',
+        'wespeestoragev0.blob.core.windows.net',
     ];
     
     $host = strtolower($parsed['host']);
