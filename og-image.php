@@ -193,8 +193,8 @@ if (!$avatarLoaded) {
         $bbox = imagettfbbox($fontSize, 0, $fontPath, $initials);
         $textWidth = $bbox[2] - $bbox[0];
         $textHeight = $bbox[1] - $bbox[7];
-        $textX = ($avatarSize - $textWidth) / 2 - $bbox[0];
-        $textY = ($avatarSize + $textHeight) / 2 - $bbox[1] - 5;
+        $textX = (int)(($avatarSize - $textWidth) / 2 - $bbox[0]);
+        $textY = (int)(($avatarSize + $textHeight) / 2 - $bbox[1] - 5);
         imagettftext($avatarCanvas, $fontSize, 0, $textX, $textY, $initialsColor, $fontPath, $initials);
     } else {
         $fontBuiltin = 5;
@@ -235,13 +235,13 @@ $badgeX = ($ogWidth - $badgeWidth) / 2;
 
 $badgeRadius = $badgeHeight / 2;
 
-imagefilledellipse($canvas, $badgeX + $badgeRadius, $badgeY + $badgeRadius, $badgeRadius * 2, $badgeRadius * 2, $lightGreen);
-imagefilledellipse($canvas, $badgeX + $badgeWidth - $badgeRadius, $badgeY + $badgeRadius, $badgeRadius * 2, $badgeRadius * 2, $lightGreen);
-imagefilledrectangle($canvas, $badgeX + $badgeRadius, $badgeY, $badgeX + $badgeWidth - $badgeRadius, $badgeY + $badgeHeight, $lightGreen);
+imagefilledellipse($canvas, (int)($badgeX + $badgeRadius), (int)($badgeY + $badgeRadius), (int)($badgeRadius * 2), (int)($badgeRadius * 2), $lightGreen);
+imagefilledellipse($canvas, (int)($badgeX + $badgeWidth - $badgeRadius), (int)($badgeY + $badgeRadius), (int)($badgeRadius * 2), (int)($badgeRadius * 2), $lightGreen);
+imagefilledrectangle($canvas, (int)($badgeX + $badgeRadius), (int)$badgeY, (int)($badgeX + $badgeWidth - $badgeRadius), (int)($badgeY + $badgeHeight), $lightGreen);
 
 if (file_exists($fontPath)) {
-    $textX = $badgeX + $badgePaddingX;
-    $textY = $badgeY + $badgePaddingY + $textHeight - 5;
+    $textX = (int)($badgeX + $badgePaddingX);
+    $textY = (int)($badgeY + $badgePaddingY + $textHeight - 5);
     imagettftext($canvas, $badgeFontSize, 0, $textX, $textY, $darkText, $fontPath, $badgeText);
 } else {
     $fontBuiltin = 5;
