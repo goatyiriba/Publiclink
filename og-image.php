@@ -6,8 +6,8 @@
 
 require_once 'config.php';
 
-$ogWidth = 1200;
-$ogHeight = 630;
+$ogWidth = 2400;
+$ogHeight = 1260;
 
 $username = isset($_GET['username']) ? preg_replace('/[^a-zA-Z0-9_]/', '', $_GET['username']) : '';
 
@@ -102,19 +102,19 @@ $avatarBg = imagecolorallocate($canvas, 229, 231, 235);
 
 imagefill($canvas, 0, 0, $bgGreen);
 
-$patternSize = 80;
-$patternSpacing = 100;
+$patternSize = 160;
+$patternSpacing = 200;
 for ($row = 0; $row < 8; $row++) {
     $offsetX = ($row % 2) * ($patternSpacing / 2);
     for ($col = 0; $col < 15; $col++) {
         $x = $offsetX + ($col * $patternSpacing);
-        $y = ($row * $patternSpacing) - 50;
+        $y = ($row * $patternSpacing) - 100;
         
-        imagesetthickness($canvas, 2);
+        imagesetthickness($canvas, 4);
         
         $cx = $x + $patternSize / 2;
         $cy = $y + $patternSize / 2;
-        $radius = $patternSize / 2 - 5;
+        $radius = $patternSize / 2 - 10;
         
         imageellipse($canvas, $cx, $cy, $radius * 2, $radius * 2, $patternGreen);
         
@@ -123,11 +123,11 @@ for ($row = 0; $row < 8; $row++) {
     }
 }
 
-$avatarSize = 180;
+$avatarSize = 360;
 $avatarX = ($ogWidth - $avatarSize) / 2;
-$avatarY = 120;
+$avatarY = 240;
 
-$borderSize = 4;
+$borderSize = 8;
 imagefilledellipse($canvas, $avatarX + $avatarSize / 2, $avatarY + $avatarSize / 2, $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
 
 $avatarCanvas = imagecreatetruecolor($avatarSize, $avatarSize);
@@ -187,7 +187,7 @@ if (!$avatarLoaded) {
     }
     
     $initialsColor = imagecolorallocate($avatarCanvas, 75, 85, 99);
-    $fontSize = 50;
+    $fontSize = 100;
     
     if (file_exists($fontPath)) {
         $bbox = imagettfbbox($fontSize, 0, $fontPath, $initials);
@@ -210,10 +210,10 @@ imagecopy($canvas, $avatarCanvas, $avatarX, $avatarY, 0, 0, $avatarSize, $avatar
 imagedestroy($avatarCanvas);
 
 $badgeText = '@' . $username;
-$badgeFontSize = 42;
-$badgePaddingX = 35;
-$badgePaddingY = 18;
-$badgeY = $avatarY + $avatarSize + 40;
+$badgeFontSize = 84;
+$badgePaddingX = 70;
+$badgePaddingY = 36;
+$badgeY = $avatarY + $avatarSize + 80;
 
 $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
 if (!file_exists($fontPath)) {
@@ -251,8 +251,8 @@ if (file_exists($fontPath)) {
 }
 
 $logoText = 'Wespee';
-$logoFontSize = 48;
-$logoY = $ogHeight - 100;
+$logoFontSize = 96;
+$logoY = $ogHeight - 200;
 
 $logoFontPath = __DIR__ . '/assets/fonts/Athletics-ExtraBold.otf';
 if (!file_exists($logoFontPath)) {
@@ -274,5 +274,5 @@ if (file_exists($logoFontPath)) {
 header('Content-Type: image/png');
 header('Cache-Control: public, max-age=86400');
 
-imagepng($canvas);
+imagepng($canvas, null, 6);
 imagedestroy($canvas);
