@@ -47,11 +47,31 @@ The `/og-image/<username>` endpoint generates a 1200x630 PNG image for social me
 Security: Avatar URLs are validated against an allowlist of Wespee-owned domains only.
 
 ## API Integration
-The app connects to an external Wespee API to fetch user profiles. API credentials are in `config.php`.
+The app connects to an external Wespee API to fetch user profiles.
+
+## Environment Variables
+API credentials are loaded from environment variables. Two methods supported:
+
+### On Replit
+Use Replit Secrets (recommended):
+- `API_CLIENT_ID` - Wespee API client ID
+- `API_CLIENT_SECRET` - Wespee API client secret
+
+### External Hosting
+Copy `.env.example` to `.env` and fill in values:
+```bash
+cp .env.example .env
+```
 
 ## Configuration
 Key settings in `config.php`:
-- API credentials (CLIENT_ID, CLIENT_SECRET)
+- API credentials (from environment variables)
 - Site branding colors
 - Social media links
 - App store URLs (iOS/Android)
+
+## Security
+- robots.txt blocks search engine indexing
+- noindex meta tags on all pages
+- Direct PHP file access blocked (403)
+- SSRF protection on OG image avatar fetching
