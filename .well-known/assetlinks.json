@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.wespee.wespee",
+    "sha256_cert_fingerprints":
+    ["9C:D1:68:B8:82:E0:BF:BA:98:37:BF:B5:72:2E:F8:35:1F:C9:76:05:B6:41:C2:A3:F9:1C:0D:77:B4:82:79:39"]
+  }
+}]

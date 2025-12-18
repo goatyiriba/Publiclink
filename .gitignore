@@ -1,0 +1,79 @@
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.buildpath
+
+# PHP
+/vendor/
+composer.phar
+composer.lock
+
+# Logs
+*.log
+/logs/
+error_log
+access_log
+
+# Cache
+/cache/
+*.cache
+
+# Environment Files
+.env
+.env.local
+.env.*.local
+
+# Temporary Files
+/tmp/
+/temp/
+*.tmp
+
+# Backup Files
+*.bak
+*.backup
+*.old
+
+# Configuration (if you want to keep local config separate)
+# config.local.php
+
+# Dependencies
+node_modules/
+bower_components/
+
+# Build Files
+/dist/
+/build/
+
+# macOS
+.AppleDouble
+.LSOverride
+
+# Windows
+$RECYCLE.BIN/
+
+# Linux
+.directory
+
+# Sass
+.sass-cache/
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.rar

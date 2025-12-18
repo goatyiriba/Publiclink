@@ -1,0 +1,431 @@
+/**
+ * Wespee Profile Web Interface - Custom Styles
+ * Extends Tailwind CSS with custom styles
+ */
+
+/* Font Face Declarations */
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-Regular-Italic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-Medium-Italic.otf') format('opentype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-Bold-Italic.otf') format('opentype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-ExtraBold.otf') format('opentype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-ExtraBold-Italic.otf') format('opentype');
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-Black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-Black-Italic.otf') format('opentype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Athletics';
+    src: url('/assets/fonts/Athletics-Light-Italic.otf') format('opentype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+/* CSS Variables */
+:root {
+    --color-wespee-green: #06D432;
+    --color-wespee-green-light: #D4F7E0;
+    --color-background: #FAFAFA;
+    --color-text-dark: #1A1A1A;
+    --color-text-gray: #6B7280;
+}
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Athletics', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Utility Classes */
+.wespee-green {
+    color: var(--color-wespee-green);
+}
+
+.bg-wespee-green {
+    background-color: var(--color-wespee-green);
+}
+
+.bg-wespee-green-light {
+    background-color: var(--color-wespee-green-light);
+}
+
+/* Button Styles */
+button {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Toast Animation */
+#toast {
+    animation: slideUp 0.3s ease-out;
+}
+
+#toast.hidden {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+}
+
+/* Modal Animations */
+#qrModal,
+#downloadModal {
+    animation: fadeIn 0.2s ease-out;
+}
+
+#qrModal > div,
+#downloadModal > div {
+    animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* QR Code Container */
+#qrcode {
+    display: inline-block;
+}
+
+#qrcode img {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Profile Avatar Styles */
+.profile-avatar {
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-avatar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Action Button Hover Effects */
+.action-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.action-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.05);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.action-button:hover::before {
+    opacity: 1;
+}
+
+.action-button:active {
+    transform: scale(0.95);
+}
+
+/* Pay Now Button Pulse Effect */
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(0, 255, 102, 0);
+    }
+}
+
+.pay-now-button {
+    animation: pulse 2s infinite;
+}
+
+/* Backdrop Blur Effect */
+.backdrop-blur {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Loading Skeleton */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 25%,
+        #e0e0e0 50%,
+        #f0f0f0 75%
+    );
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Focus Styles for Accessibility */
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--color-wespee-green);
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+    /* Adjust font sizes for mobile */
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    /* Ensure touch targets are at least 44x44px */
+    button,
+    a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Dark Mode Support (optional) */
+@media (prefers-color-scheme: dark) {
+    /* Uncomment to enable dark mode */
+    /*
+    :root {
+        --color-background: #1A1A1A;
+        --color-text-dark: #FFFFFF;
+        --color-text-gray: #9CA3AF;
+    }
+
+    body {
+        background-color: var(--color-background);
+        color: var(--color-text-dark);
+    }
+
+    .bg-white {
+        background-color: #2D2D2D !important;
+    }
+
+    .bg-gray-50 {
+        background-color: #1A1A1A !important;
+    }
+
+    .bg-gray-100 {
+        background-color: #2D2D2D !important;
+    }
+
+    .bg-gray-200 {
+        background-color: #3D3D3D !important;
+    }
+
+    .text-gray-900 {
+        color: #FFFFFF !important;
+    }
+
+    .text-gray-600 {
+        color: #9CA3AF !important;
+    }
+    */
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    button,
+    a {
+        outline: 2px solid currentColor;
+    }
+
+    .bg-wespee-green {
+        background-color: #00CC00;
+    }
+}
+
+/* Custom Selection Color */
+::selection {
+    background-color: var(--color-wespee-green);
+    color: var(--color-text-dark);
+}
+
+::-moz-selection {
+    background-color: var(--color-wespee-green);
+    color: var(--color-text-dark);
+}
+
+/* Image Loading */
+img {
+    image-rendering: auto;
+    image-rendering: crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/* Prevent text size adjustment on orientation change */
+@media screen and (orientation: landscape) {
+    html {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+}
