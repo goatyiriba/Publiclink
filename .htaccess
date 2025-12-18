@@ -9,6 +9,9 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
+# Rewrite og-image URLs to og-image.php
+RewriteRule ^og-image/([a-zA-Z0-9_]+)$ og-image.php?username=$1 [L,QSA]
+
 # Rewrite username URLs to index.php
 RewriteRule ^([a-zA-Z0-9_]+)$ index.php?username=$1 [L,QSA]
 
