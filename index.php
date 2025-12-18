@@ -232,31 +232,33 @@ $ogImage = SITE_URL . '/og-image/' . $username . $ogImageParams;
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="grid grid-cols-3 gap-4 mb-6">
-                <!-- Copy Link Button -->
-                <button onclick="copyProfileLink()" class="flex flex-col items-center justify-center gap-3 py-6">
-                    <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
-                        <img src="/assets/images/Vector (1).svg" alt="Link icon" class="w-7 h-7">
-                    </div>
-                    <span class="text-xs text-center font-medium text-gray-900 leading-tight">Copier le lien<br>du profil</span>
-                </button>
+            <!-- Action Buttons Card -->
+            <div class="bg-white rounded-[30px] p-5 shadow-sm mb-6">
+                <div class="grid grid-cols-3 gap-2">
+                    <!-- Copy Link Button -->
+                    <button onclick="copyProfileLink()" class="flex flex-col items-center justify-center gap-3 py-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+                            <img src="/assets/images/Vector (1).svg" alt="Link icon" class="w-6 h-6">
+                        </div>
+                        <span class="text-sm text-center font-medium text-gray-900 leading-tight">Copier le lien<br>du profil</span>
+                    </button>
 
-                <!-- Share Button -->
-                <button onclick="shareProfile()" class="flex flex-col items-center justify-center gap-3 py-6">
-                    <div class="w-16 h-16 rounded-full bg-wespee-green flex items-center justify-center">
-                        <img src="/assets/images/share-08.svg" alt="Share icon" class="w-7 h-7">
-                    </div>
-                    <span class="text-xs text-center font-medium text-gray-900 leading-tight">Partager le<br>profil</span>
-                </button>
+                    <!-- Share Button -->
+                    <button onclick="shareProfile()" class="flex flex-col items-center justify-center gap-3 py-4">
+                        <div class="w-12 h-12 rounded-full bg-wespee-green flex items-center justify-center">
+                            <img src="/assets/images/share-08.svg" alt="Share icon" class="w-6 h-6">
+                        </div>
+                        <span class="text-sm text-center font-medium text-gray-900 leading-tight">Partager le<br>profil</span>
+                    </button>
 
-                <!-- QR Code Button -->
-                <button onclick="showQRCode()" class="flex flex-col items-center justify-center gap-3 py-6">
-                    <div class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
-                        <img src="/assets/images/qr-code 1.svg" alt="QR code icon" class="w-7 h-7">
-                    </div>
-                    <span class="text-xs text-center font-medium text-gray-900 leading-tight">Afficher le QR<br>code</span>
-                </button>
+                    <!-- QR Code Button -->
+                    <button onclick="showQRCode()" class="flex flex-col items-center justify-center gap-3 py-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-200 bg-opacity-50 flex items-center justify-center">
+                            <img src="/assets/images/qr-code 1.svg" alt="QR code icon" class="w-5 h-5">
+                        </div>
+                        <span class="text-sm text-center font-medium text-gray-900 leading-tight">Afficher le QR<br>code</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
