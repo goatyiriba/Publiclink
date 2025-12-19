@@ -194,6 +194,8 @@ $ogImage = SITE_URL . '/og-image/' . $username . $ogImageParams;
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    <link rel="apple-touch-icon" href="/assets/images/favicon.png">
+    <meta property="og:logo" content="<?php echo SITE_URL; ?>/assets/images/favicon.png">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>

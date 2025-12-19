@@ -25,6 +25,7 @@ $username = isset($_GET['username']) ? htmlspecialchars($_GET['username']) : '';
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+    <link rel="apple-touch-icon" href="/assets/images/favicon.png">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
