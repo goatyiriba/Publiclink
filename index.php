@@ -103,6 +103,8 @@ function getUserProfile($username) {
     return [
         'success' => true,
         'username' => $result['username'] ?? $cleanedUsername,
+        'firstName' => $result['firstName'] ?? '',
+        'lastName' => $result['lastName'] ?? '',
         'profilePictureUrl' => $result['profilePictureUrl'] ?? '',
         'publicProfileUrl' => $result['publicProfileUrl'] ?? '',
         'qrCode' => $result['qrCode'] ?? '',
@@ -136,8 +138,13 @@ if (isset($profile['error'])) {
 
 // Prepare data for frontend
 $username = htmlspecialchars($profile['username']);
-// For display name, use just the username (without @) since API doesn't return full name
-$displayName = ucfirst($username); // Capitalize first letter
+$firstName = htmlspecialchars($profile['firstName'] ?? '');
+$lastName = htmlspecialchars($profile['lastName'] ?? '');
+// Build display name from firstName + lastName, fallback to username
+$displayName = trim($firstName . ' ' . $lastName);
+if (empty($displayName)) {
+    $displayName = ucfirst($username);
+}
 $profilePictureUrl = htmlspecialchars($profile['profilePictureUrl']);
 $initials = getInitials($username);
 $profileUrl = SITE_URL . '/' . $username;

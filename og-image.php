@@ -21,7 +21,7 @@ $initials = strtoupper(substr($username, 0, 2));
 $fullName = '';
 
 if (empty($avatarUrl)) {
-    $apiUrl = API_BASE_URL . '/users/' . urlencode($username) . '/profile';
+    $apiUrl = API_BASE_URL . '/public/users/' . urlencode($username);
     $ctx = stream_context_create([
         'http' => [
             'method' => 'GET',
