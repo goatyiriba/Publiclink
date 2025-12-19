@@ -51,8 +51,8 @@ function getUserProfile($username) {
     curl_setopt($ch, CURLOPT_HTTPGET, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
-        'x-client-id: ' . API_CLIENT_ID,
-        'x-client-secret: ' . API_CLIENT_SECRET,
+        'x-public-client-id: ' . API_CLIENT_ID,
+        'x-public-client-secret: ' . API_CLIENT_SECRET,
     ]);
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 

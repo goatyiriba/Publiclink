@@ -27,8 +27,8 @@ if (empty($avatarUrl)) {
             'method' => 'GET',
             'header' => [
                 'Accept: application/json',
-                'X-Client-Id: ' . API_CLIENT_ID,
-                'X-Client-Secret: ' . API_CLIENT_SECRET,
+                'x-public-client-id: ' . API_CLIENT_ID,
+                'x-public-client-secret: ' . API_CLIENT_SECRET,
             ],
             'timeout' => 5,
         ],
