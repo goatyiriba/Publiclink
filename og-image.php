@@ -4,6 +4,13 @@
  * Generates social sharing preview images for user profiles
  */
 
+// Production: disable error display
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+
+// Security headers for image endpoint
+header('X-Content-Type-Options: nosniff');
+
 require_once 'config.php';
 
 $ogWidth = 2400;

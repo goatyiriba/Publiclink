@@ -4,9 +4,17 @@
  * Main entry point for user profile pages
  */
 
-// Enable error reporting for debugging
+// Production: disable error display, log errors instead
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+
+// Security headers
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
+header('X-XSS-Protection: 1; mode=block');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'");
 
 require_once 'config.php';
 
@@ -56,9 +64,9 @@ function getUserProfile($username) {
     ]);
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
-    // SSL configuration for Windows
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Disable SSL verification for testing
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    // SSL configuration - enabled for production security
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 
     // Execute request
     $response = curl_exec($ch);
