@@ -193,7 +193,7 @@ $ogImage = SITE_URL . '/og-image/' . $username . $ogImageParams;
     <meta name="twitter:image:alt" content="Profil <?php echo SITE_NAME; ?> de @<?php echo $username; ?>">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="icon" type="image/png" href="/assets/images/favicon.png">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
