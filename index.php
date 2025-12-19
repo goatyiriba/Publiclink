@@ -145,8 +145,8 @@ $qrCodeData = $profile['qrCode'] ?? ''; // QR code is now provided by API as bas
 $deepLink = 'https://asset.wespee.me/' . $username; // Deep link format
 
 // Meta tags for SEO and social sharing
-$pageTitle = 'Payez-moi sur ' . SITE_NAME;
-$pageDescription = 'Envoyez et recevez de l\'argent instantanément avec ' . SITE_NAME;
+$pageTitle = 'Payer ' . $displayName . ' avec ' . SITE_NAME;
+$pageDescription = 'Envoyez de l\'argent à ' . $displayName . ' instantanément avec ' . SITE_NAME;
 $ogImageParams = !empty($profilePictureUrl) ? '?avatar=' . urlencode($profilePictureUrl) : '';
 $ogImage = SITE_URL . '/og-image/' . $username . $ogImageParams;
 ?>
