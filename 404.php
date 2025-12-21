@@ -26,9 +26,45 @@ $username = isset($_GET['username']) ? htmlspecialchars($_GET['username']) : '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Utilisateur non trouvé - <?php echo SITE_NAME; ?></title>
 
+<?php
+// Get username from URL for OG image
+$requestUri = $_SERVER['REQUEST_URI'] ?? '';
+$urlUsername = trim(parse_url($requestUri, PHP_URL_PATH), '/');
+$urlUsername = preg_replace('/[^a-zA-Z0-9_]/', '', $urlUsername);
+if (empty($urlUsername)) {
+    $urlUsername = 'unknown';
+}
+$ogImage = SITE_URL . '/og-image/' . $urlUsername;
+$pageTitle = "Utilisateur n'existe pas - " . SITE_NAME;
+$pageDescription = "Cet utilisateur n'existe pas sur " . SITE_NAME;
+$pageUrl = SITE_URL . '/' . $urlUsername;
+?>
     <!-- SEO Meta Tags -->
-    <meta name="description" content="<?php echo SITE_DESCRIPTION; ?>">
+    <meta name="description" content="<?php echo $pageDescription; ?>">
     <meta name="robots" content="noindex, nofollow">
+
+    <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="<?php echo SITE_NAME; ?>">
+    <meta property="og:url" content="<?php echo $pageUrl; ?>">
+    <meta property="og:title" content="<?php echo $pageTitle; ?>">
+    <meta property="og:description" content="<?php echo $pageDescription; ?>">
+    <meta property="og:image" content="<?php echo $ogImage; ?>">
+    <meta property="og:image:secure_url" content="<?php echo $ogImage; ?>">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="2400">
+    <meta property="og:image:height" content="1260">
+    <meta property="og:image:alt" content="Utilisateur non trouvé sur <?php echo SITE_NAME; ?>">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@wespee">
+    <meta name="twitter:url" content="<?php echo $pageUrl; ?>">
+    <meta name="twitter:title" content="<?php echo $pageTitle; ?>">
+    <meta name="twitter:description" content="<?php echo $pageDescription; ?>">
+    <meta name="twitter:image" content="<?php echo $ogImage; ?>">
+    <meta name="twitter:image:alt" content="Utilisateur non trouvé sur <?php echo SITE_NAME; ?>">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/assets/images/favicon.png">
