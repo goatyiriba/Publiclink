@@ -131,9 +131,9 @@ for ($row = 0; $row < 8; $row++) {
     }
 }
 
-$avatarSize = 360;
+$avatarSize = 320;
 $avatarX = ($ogWidth - $avatarSize) / 2;
-$avatarY = 180;
+$avatarY = 160;
 
 $borderSize = 8;
 imagefilledellipse($canvas, (int)($avatarX + $avatarSize / 2), (int)($avatarY + $avatarSize / 2), $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
@@ -218,8 +218,8 @@ imagecopy($canvas, $avatarCanvas, (int)$avatarX, (int)$avatarY, 0, 0, $avatarSiz
 imagedestroy($avatarCanvas);
 
 // Display full name (Prénom Nom) below avatar
-$nameFontSize = 72;
-$nameY = (int)($avatarY + $avatarSize + 60);
+$nameFontSize = 64;
+$nameY = (int)($avatarY + $avatarSize + 50);
 $displayName = !empty($fullName) ? $fullName : $username;
 
 $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
@@ -241,10 +241,10 @@ if (file_exists($fontPath)) {
 
 // Badge with @username
 $badgeText = '@' . $username;
-$badgeFontSize = 56;
-$badgePaddingX = 50;
-$badgePaddingY = 24;
-$badgeY = $nameY + 50;
+$badgeFontSize = 48;
+$badgePaddingX = 40;
+$badgePaddingY = 20;
+$badgeY = $nameY + 40;
 
 if (file_exists($fontPath)) {
     $bbox = imagettfbbox($badgeFontSize, 0, $fontPath, $badgeText);
@@ -277,8 +277,8 @@ if (file_exists($fontPath)) {
 }
 
 $logoText = 'Wespee';
-$logoFontSize = 96;
-$logoY = $ogHeight - 160;
+$logoFontSize = 80;
+$logoY = $badgeY + $badgeHeight + 120;
 
 $logoFontPath = __DIR__ . '/assets/fonts/Athletics-ExtraBold.otf';
 if (!file_exists($logoFontPath)) {
