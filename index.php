@@ -122,9 +122,9 @@ function getUserProfile($username) {
 // Get username from URL
 $username = isset($_GET['username']) ? $_GET['username'] : '';
 
-// If no username, redirect to main site or show homepage
+// If no username, redirect to main app site
 if (empty($username)) {
-    header('Location: ' . SITE_URL);
+    header('Location: ' . MAIN_APP_URL);
     exit;
 }
 

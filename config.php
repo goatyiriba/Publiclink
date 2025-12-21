@@ -33,8 +33,11 @@ define('ANDROID_PLAY_STORE_URL', ''); // TODO: Add Android Play Store URL
 
 // Website Configuration
 define('SITE_NAME', 'Wespee');
-define('SITE_URL', 'https://wespee.app');
+define('SITE_URL', 'https://wespee.me');
 define('SITE_DESCRIPTION', 'Envoyez et recevez de l\'argent facilement avec Wespee');
+
+// Main app URL (for redirections to main site)
+define('MAIN_APP_URL', 'https://wespee.app');
 
 // Social Media Links
 define('SOCIAL_YOUTUBE', 'https://youtube.com/@wespee');
