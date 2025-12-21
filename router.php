@@ -94,26 +94,33 @@ if (preg_match('/\.php$/i', $uri) && $uri !== '/') {
     exit;
 }
 
-// Block WordPress/common CMS attack paths
-$blockedPatterns = [
-    '/^\/wp-/i',
-    '/^\/wordpress/i',
-    '/^\/phpmyadmin/i',
-    '/^\/adminer/i',
-    '/^\/mysql/i',
-    '/\.sql$/i',
-    '/\.bak$/i',
-    '/\.backup$/i',
-    '/\.old$/i',
-    '/\.log$/i',
-    '/\.ini$/i',
+// Block common CMS attack paths (exact paths only, not username patterns)
+$blockedExactAttackPaths = [
+    '/wp-admin',
+    '/wp-login.php',
+    '/wp-content',
+    '/wp-includes',
+    '/wordpress',
+    '/phpmyadmin',
+    '/adminer',
+    '/mysql',
+    '/phpinfo',
+    '/server-status',
+    '/server-info',
 ];
 
-foreach ($blockedPatterns as $pattern) {
-    if (preg_match($pattern, $uri)) {
+$uriLower = strtolower($uri);
+foreach ($blockedExactAttackPaths as $blocked) {
+    if ($uriLower === $blocked || strpos($uriLower, $blocked . '/') === 0) {
         http_response_code(404);
         exit;
     }
+}
+
+// Block dangerous file extensions
+if (preg_match('/\.(sql|bak|backup|old|log|ini|conf|config|sh|bash)$/i', $uri)) {
+    http_response_code(404);
+    exit;
 }
 
 // ============================================
