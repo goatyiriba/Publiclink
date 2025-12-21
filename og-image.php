@@ -110,33 +110,12 @@ $avatarBg = imagecolorallocate($canvas, 229, 231, 235);
 
 imagefill($canvas, 0, 0, $bgGreen);
 
-$patternSize = 280;
-$patternSpacing = 360;
-$patternAlpha = imagecolorallocatealpha($canvas, 3, 180, 40, 100);
-for ($row = 0; $row < 4; $row++) {
-    $offsetX = ($row % 2) * ($patternSpacing / 2);
-    for ($col = 0; $col < 8; $col++) {
-        $x = $offsetX + ($col * $patternSpacing);
-        $y = ($row * $patternSpacing);
-        
-        imagesetthickness($canvas, 2);
-        
-        $cx = $x + $patternSize / 2;
-        $cy = $y + $patternSize / 2;
-        $radius = $patternSize / 2 - 40;
-        
-        imageellipse($canvas, $cx, $cy, $radius * 2, $radius * 2, $patternAlpha);
-        
-        $innerRadius = $radius * 0.4;
-        imageellipse($canvas, $cx, $cy, $innerRadius * 2, $innerRadius * 2, $patternAlpha);
-    }
-}
 
-$avatarSize = 480;
+$avatarSize = 340;
 $avatarX = ($ogWidth - $avatarSize) / 2;
-$avatarY = 260;
+$avatarY = 280;
 
-$borderSize = 14;
+$borderSize = 10;
 imagefilledellipse($canvas, (int)($avatarX + $avatarSize / 2), (int)($avatarY + $avatarSize / 2), $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
 
 $avatarCanvas = imagecreatetruecolor($avatarSize, $avatarSize);
@@ -218,64 +197,69 @@ if (!$avatarLoaded) {
 imagecopy($canvas, $avatarCanvas, (int)$avatarX, (int)$avatarY, 0, 0, $avatarSize, $avatarSize);
 imagedestroy($avatarCanvas);
 
-// Display full name (Prénom Nom) below avatar
-$nameFontSize = 90;
-$nameY = 860;
-$displayName = !empty($fullName) ? $fullName : $username;
+// Display $username in large white text below avatar (Cash App style)
+$nameFontSize = 100;
+$nameY = 760;
+$displayName = '$' . $username;
 
 $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
 if (!file_exists($fontPath)) {
     $fontPath = __DIR__ . '/assets/fonts/Athletics-Medium.otf';
 }
 
-$blackText = imagecolorallocate($canvas, 0, 0, 0);
 if (file_exists($fontPath)) {
     $bbox = imagettfbbox($nameFontSize, 0, $fontPath, $displayName);
     $nameWidth = $bbox[2] - $bbox[0];
     $nameX = (int)(($ogWidth - $nameWidth) / 2 - $bbox[0]);
-    imagettftext($canvas, $nameFontSize, 0, $nameX, $nameY, $blackText, $fontPath, $displayName);
+    imagettftext($canvas, $nameFontSize, 0, $nameX, $nameY, $white, $fontPath, $displayName);
 } else {
     $fontBuiltin = 5;
     $nameWidth = imagefontwidth($fontBuiltin) * strlen($displayName);
     $nameX = (int)(($ogWidth - $nameWidth) / 2);
-    imagestring($canvas, $fontBuiltin, $nameX, $nameY - 20, $displayName, $blackText);
+    imagestring($canvas, $fontBuiltin, $nameX, $nameY - 20, $displayName, $white);
 }
 
-// Badge with @username
-$userBadgeText = '@' . $username;
-$userBadgeFontSize = 52;
-$userBadgePaddingX = 40;
-$userBadgePaddingY = 22;
-$userBadgeY = 920;
+// Wespee logo badge at bottom (like Cash App)
+$logoText = 'Wespee';
+$logoFontSize = 48;
+$logoPaddingX = 50;
+$logoPaddingY = 20;
+$logoY = 880;
 
-if (file_exists($fontPath)) {
-    $bbox = imagettfbbox($userBadgeFontSize, 0, $fontPath, $userBadgeText);
-    $textWidth = $bbox[2] - $bbox[0];
-    $textHeight = $bbox[1] - $bbox[7];
+$logoFontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
+if (!file_exists($logoFontPath)) {
+    $logoFontPath = $fontPath;
+}
+
+if (file_exists($logoFontPath)) {
+    $bbox = imagettfbbox($logoFontSize, 0, $logoFontPath, $logoText);
+    $logoTextWidth = $bbox[2] - $bbox[0];
+    $logoTextHeight = $bbox[1] - $bbox[7];
 } else {
-    $textWidth = strlen($userBadgeText) * 20;
-    $textHeight = 30;
+    $logoTextWidth = strlen($logoText) * 20;
+    $logoTextHeight = 30;
 }
 
-$userBadgeWidth = $textWidth + $userBadgePaddingX * 2;
-$userBadgeHeight = $textHeight + $userBadgePaddingY * 2;
-$userBadgeX = ($ogWidth - $userBadgeWidth) / 2;
+$logoBadgeWidth = $logoTextWidth + $logoPaddingX * 2;
+$logoBadgeHeight = $logoTextHeight + $logoPaddingY * 2;
+$logoBadgeX = ($ogWidth - $logoBadgeWidth) / 2;
 
-$userBadgeRadius = $userBadgeHeight / 2;
+$logoBadgeRadius = $logoBadgeHeight / 2;
 
-imagefilledellipse($canvas, (int)($userBadgeX + $userBadgeRadius), (int)($userBadgeY + $userBadgeRadius), (int)($userBadgeRadius * 2), (int)($userBadgeRadius * 2), $lightGreen);
-imagefilledellipse($canvas, (int)($userBadgeX + $userBadgeWidth - $userBadgeRadius), (int)($userBadgeY + $userBadgeRadius), (int)($userBadgeRadius * 2), (int)($userBadgeRadius * 2), $lightGreen);
-imagefilledrectangle($canvas, (int)($userBadgeX + $userBadgeRadius), (int)$userBadgeY, (int)($userBadgeX + $userBadgeWidth - $userBadgeRadius), (int)($userBadgeY + $userBadgeHeight), $lightGreen);
+imagefilledellipse($canvas, (int)($logoBadgeX + $logoBadgeRadius), (int)($logoY + $logoBadgeRadius), (int)($logoBadgeRadius * 2), (int)($logoBadgeRadius * 2), $white);
+imagefilledellipse($canvas, (int)($logoBadgeX + $logoBadgeWidth - $logoBadgeRadius), (int)($logoY + $logoBadgeRadius), (int)($logoBadgeRadius * 2), (int)($logoBadgeRadius * 2), $white);
+imagefilledrectangle($canvas, (int)($logoBadgeX + $logoBadgeRadius), (int)$logoY, (int)($logoBadgeX + $logoBadgeWidth - $logoBadgeRadius), (int)($logoY + $logoBadgeHeight), $white);
 
-if (file_exists($fontPath)) {
-    $textX = (int)($userBadgeX + $userBadgePaddingX);
-    $textY = (int)($userBadgeY + $userBadgePaddingY + $textHeight - 5);
-    imagettftext($canvas, $userBadgeFontSize, 0, $textX, $textY, $darkText, $fontPath, $userBadgeText);
+$wespeeGreen = imagecolorallocate($canvas, 6, 212, 50);
+if (file_exists($logoFontPath)) {
+    $textX = (int)($logoBadgeX + $logoPaddingX);
+    $textY = (int)($logoY + $logoPaddingY + $logoTextHeight - 5);
+    imagettftext($canvas, $logoFontSize, 0, $textX, $textY, $wespeeGreen, $logoFontPath, $logoText);
 } else {
     $fontBuiltin = 5;
-    $textX = (int)(($ogWidth - $textWidth) / 2);
-    $textY = (int)($userBadgeY + $userBadgePaddingY);
-    imagestring($canvas, $fontBuiltin, $textX, $textY, $userBadgeText, $darkText);
+    $textX = (int)(($ogWidth - $logoTextWidth) / 2);
+    $textY = (int)($logoY + $logoPaddingY);
+    imagestring($canvas, $fontBuiltin, $textX, $textY, $logoText, $wespeeGreen);
 }
 
 header('Content-Type: image/png');
