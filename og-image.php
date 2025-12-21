@@ -110,30 +110,30 @@ $avatarBg = imagecolorallocate($canvas, 229, 231, 235);
 
 imagefill($canvas, 0, 0, $bgGreen);
 
-$patternSize = 160;
-$patternSpacing = 200;
-for ($row = 0; $row < 8; $row++) {
+$patternSize = 200;
+$patternSpacing = 280;
+for ($row = 0; $row < 6; $row++) {
     $offsetX = ($row % 2) * ($patternSpacing / 2);
-    for ($col = 0; $col < 15; $col++) {
+    for ($col = 0; $col < 12; $col++) {
         $x = $offsetX + ($col * $patternSpacing);
-        $y = ($row * $patternSpacing) - 100;
+        $y = ($row * $patternSpacing) - 50;
         
-        imagesetthickness($canvas, 4);
+        imagesetthickness($canvas, 3);
         
         $cx = $x + $patternSize / 2;
         $cy = $y + $patternSize / 2;
-        $radius = $patternSize / 2 - 10;
+        $radius = $patternSize / 2 - 20;
         
         imageellipse($canvas, $cx, $cy, $radius * 2, $radius * 2, $patternGreen);
         
-        $innerRadius = $radius * 0.6;
+        $innerRadius = $radius * 0.5;
         imageellipse($canvas, $cx, $cy, $innerRadius * 2, $innerRadius * 2, $patternGreen);
     }
 }
 
-$avatarSize = 400;
+$avatarSize = 360;
 $avatarX = ($ogWidth - $avatarSize) / 2;
-$avatarY = 200;
+$avatarY = 280;
 
 $borderSize = 10;
 imagefilledellipse($canvas, (int)($avatarX + $avatarSize / 2), (int)($avatarY + $avatarSize / 2), $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
@@ -218,8 +218,8 @@ imagecopy($canvas, $avatarCanvas, (int)$avatarX, (int)$avatarY, 0, 0, $avatarSiz
 imagedestroy($avatarCanvas);
 
 // Display full name (Prénom Nom) below avatar
-$nameFontSize = 80;
-$nameY = (int)($avatarY + $avatarSize + 80);
+$nameFontSize = 84;
+$nameY = (int)($avatarY + $avatarSize + 120);
 $displayName = !empty($fullName) ? $fullName : $username;
 
 $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
@@ -242,9 +242,9 @@ if (file_exists($fontPath)) {
 // Badge with @username
 $badgeText = '@' . $username;
 $badgeFontSize = 60;
-$badgePaddingX = 50;
-$badgePaddingY = 24;
-$badgeY = $nameY + 40;
+$badgePaddingX = 56;
+$badgePaddingY = 28;
+$badgeY = $nameY + 48;
 
 if (file_exists($fontPath)) {
     $bbox = imagettfbbox($badgeFontSize, 0, $fontPath, $badgeText);
@@ -277,8 +277,8 @@ if (file_exists($fontPath)) {
 }
 
 $logoText = 'Wespee';
-$logoFontSize = 72;
-$logoY = $badgeY + $badgeHeight + 60;
+$logoFontSize = 68;
+$logoY = $badgeY + $badgeHeight + 96;
 
 $logoFontPath = __DIR__ . '/assets/fonts/Athletics-ExtraBold.otf';
 if (!file_exists($logoFontPath)) {
