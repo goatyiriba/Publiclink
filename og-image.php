@@ -182,12 +182,18 @@ if (!$userExists) {
     exit;
 }
 
-$avatarSize = 480;
-$avatarX = ($ogWidth - $avatarSize) / 2;
-$avatarY = 200;
+// ============================================
+// NEW DESIGN: Avatar with green border + badge on avatar + name + @username pill
+// ============================================
 
-$borderSize = 14;
-imagefilledellipse($canvas, (int)($avatarX + $avatarSize / 2), (int)($avatarY + $avatarSize / 2), $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
+$avatarSize = 420;
+$avatarX = ($ogWidth - $avatarSize) / 2;
+$avatarY = 180;
+
+// Draw GREEN border around avatar (thicker border)
+$borderSize = 16;
+$borderGreen = imagecolorallocate($canvas, 255, 255, 255);
+imagefilledellipse($canvas, (int)($avatarX + $avatarSize / 2), (int)($avatarY + $avatarSize / 2), $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $borderGreen);
 
 $avatarCanvas = imagecreatetruecolor($avatarSize, $avatarSize);
 imagesavealpha($avatarCanvas, true);
@@ -246,7 +252,7 @@ if (!$avatarLoaded) {
     }
     
     $initialsColor = imagecolorallocate($avatarCanvas, 75, 85, 99);
-    $fontSize = 120;
+    $fontSize = 100;
     
     if (file_exists($fontPath)) {
         $bbox = imagettfbbox($fontSize, 0, $fontPath, $initials);
@@ -268,41 +274,8 @@ if (!$avatarLoaded) {
 imagecopy($canvas, $avatarCanvas, (int)$avatarX, (int)$avatarY, 0, 0, $avatarSize, $avatarSize);
 imagedestroy($avatarCanvas);
 
-// Display @username in large white text below avatar
-$nameFontSize = 120;
-$nameY = 880;
-$displayName = '@' . $username;
-
-$fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
-if (!file_exists($fontPath)) {
-    $fontPath = __DIR__ . '/assets/fonts/Athletics-Medium.otf';
-}
-
-// Calculate badge size and position
-$badgeSize = 100;
-$badgeGap = 20;
-
-if (file_exists($fontPath)) {
-    $bbox = imagettfbbox($nameFontSize, 0, $fontPath, $displayName);
-    $nameWidth = $bbox[2] - $bbox[0];
-    $totalWidth = $nameWidth + $badgeGap + $badgeSize;
-    $nameX = (int)(($ogWidth - $totalWidth) / 2 - $bbox[0]);
-    imagettftext($canvas, $nameFontSize, 0, $nameX, $nameY, $white, $fontPath, $displayName);
-    
-    // Draw Facebook-style blue verified badge
-    $badgeCenterX = (int)($nameX + $nameWidth + $badgeGap + $badgeSize / 2);
-    $badgeCenterY = (int)($nameY - $nameFontSize / 2 + 10);
-} else {
-    $fontBuiltin = 5;
-    $nameWidth = imagefontwidth($fontBuiltin) * strlen($displayName);
-    $nameX = (int)(($ogWidth - $nameWidth) / 2);
-    imagestring($canvas, $fontBuiltin, $nameX, $nameY - 20, $displayName, $white);
-    
-    $badgeCenterX = (int)($nameX + $nameWidth + $badgeGap + $badgeSize / 2);
-    $badgeCenterY = (int)($nameY - 10);
-}
-
-// Load and draw the green verified badge image
+// Draw verified badge at bottom-right of avatar
+$badgeSize = 80;
 $badgePath = __DIR__ . '/assets/images/verified-badge.png';
 if (file_exists($badgePath)) {
     $badgeImg = imagecreatefrompng($badgePath);
@@ -311,13 +284,77 @@ if (file_exists($badgePath)) {
         $srcW = imagesx($badgeImg);
         $srcH = imagesy($badgeImg);
         
-        // Resize badge to fit
-        $badgeX = (int)($badgeCenterX - $badgeSize / 2);
-        $badgeY = (int)($badgeCenterY - $badgeSize / 2);
+        // Position badge at bottom-right of avatar circle
+        $badgeX = (int)($avatarX + $avatarSize - $badgeSize / 2 - 30);
+        $badgeY = (int)($avatarY + $avatarSize - $badgeSize / 2 - 30);
         
         imagecopyresampled($canvas, $badgeImg, $badgeX, $badgeY, 0, 0, $badgeSize, $badgeSize, $srcW, $srcH);
         imagedestroy($badgeImg);
     }
+}
+
+// Display full name in white text below avatar
+$fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
+if (!file_exists($fontPath)) {
+    $fontPath = __DIR__ . '/assets/fonts/Athletics-Medium.otf';
+}
+
+$nameY = 720;
+$displayFullName = !empty($fullName) ? $fullName : $username;
+$nameFontSize = 100;
+
+if (file_exists($fontPath)) {
+    $bbox = imagettfbbox($nameFontSize, 0, $fontPath, $displayFullName);
+    $nameWidth = $bbox[2] - $bbox[0];
+    $nameX = (int)(($ogWidth - $nameWidth) / 2 - $bbox[0]);
+    imagettftext($canvas, $nameFontSize, 0, $nameX, $nameY, $white, $fontPath, $displayFullName);
+} else {
+    $fontBuiltin = 5;
+    $nameWidth = imagefontwidth($fontBuiltin) * strlen($displayFullName);
+    $nameX = (int)(($ogWidth - $nameWidth) / 2);
+    imagestring($canvas, $fontBuiltin, $nameX, $nameY - 20, $displayFullName, $white);
+}
+
+// Draw @username in a pill/badge (light green background with green text)
+$usernamePillText = '@' . $username;
+$pillFontSize = 50;
+$pillPaddingX = 50;
+$pillPaddingY = 25;
+$pillY = 820;
+
+// Pill colors
+$pillBgColor = imagecolorallocate($canvas, 220, 252, 231);
+$pillTextColor = imagecolorallocate($canvas, 22, 163, 74);
+
+if (file_exists($fontPath)) {
+    $bbox = imagettfbbox($pillFontSize, 0, $fontPath, $usernamePillText);
+    $textWidth = $bbox[2] - $bbox[0];
+    $textHeight = $bbox[1] - $bbox[7];
+    
+    $pillWidth = $textWidth + $pillPaddingX * 2;
+    $pillHeight = $textHeight + $pillPaddingY * 2;
+    $pillX = (int)(($ogWidth - $pillWidth) / 2);
+    
+    // Draw rounded rectangle pill background
+    $radius = (int)($pillHeight / 2);
+    imagefilledellipse($canvas, $pillX + $radius, $pillY + $radius, $radius * 2, $radius * 2, $pillBgColor);
+    imagefilledellipse($canvas, $pillX + $pillWidth - $radius, $pillY + $radius, $radius * 2, $radius * 2, $pillBgColor);
+    imagefilledrectangle($canvas, $pillX + $radius, $pillY, $pillX + $pillWidth - $radius, $pillY + $pillHeight, $pillBgColor);
+    
+    // Draw text inside pill
+    $textX = (int)(($ogWidth - $textWidth) / 2 - $bbox[0]);
+    $textY = (int)($pillY + $pillPaddingY + $textHeight - $bbox[1] - 5);
+    imagettftext($canvas, $pillFontSize, 0, $textX, $textY, $pillTextColor, $fontPath, $usernamePillText);
+} else {
+    $fontBuiltin = 5;
+    $textWidth = imagefontwidth($fontBuiltin) * strlen($usernamePillText);
+    $textHeight = imagefontheight($fontBuiltin);
+    $pillWidth = $textWidth + 40;
+    $pillHeight = $textHeight + 20;
+    $pillX = (int)(($ogWidth - $pillWidth) / 2);
+    
+    imagefilledrectangle($canvas, $pillX, $pillY, $pillX + $pillWidth, $pillY + $pillHeight, $pillBgColor);
+    imagestring($canvas, $fontBuiltin, $pillX + 20, $pillY + 10, $usernamePillText, $pillTextColor);
 }
 
 header('Content-Type: image/png');
