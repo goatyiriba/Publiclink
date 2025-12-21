@@ -110,12 +110,33 @@ $avatarBg = imagecolorallocate($canvas, 229, 231, 235);
 
 imagefill($canvas, 0, 0, $bgGreen);
 
+// Draw Wespee watermark pattern in background
+$watermarkText = 'Wespee';
+$watermarkFontSize = 60;
+$watermarkFontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
+if (!file_exists($watermarkFontPath)) {
+    $watermarkFontPath = __DIR__ . '/assets/fonts/Athletics-Medium.otf';
+}
+$watermarkColor = imagecolorallocatealpha($canvas, 255, 255, 255, 110);
 
-$avatarSize = 420;
+if (file_exists($watermarkFontPath)) {
+    $spacingX = 400;
+    $spacingY = 200;
+    for ($row = 0; $row < 8; $row++) {
+        $offsetX = ($row % 2) * ($spacingX / 2);
+        for ($col = 0; $col < 8; $col++) {
+            $x = $offsetX + ($col * $spacingX) - 100;
+            $y = ($row * $spacingY) + 80;
+            imagettftext($canvas, $watermarkFontSize, -15, (int)$x, (int)$y, $watermarkColor, $watermarkFontPath, $watermarkText);
+        }
+    }
+}
+
+$avatarSize = 480;
 $avatarX = ($ogWidth - $avatarSize) / 2;
-$avatarY = 240;
+$avatarY = 200;
 
-$borderSize = 12;
+$borderSize = 14;
 imagefilledellipse($canvas, (int)($avatarX + $avatarSize / 2), (int)($avatarY + $avatarSize / 2), $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
 
 $avatarCanvas = imagecreatetruecolor($avatarSize, $avatarSize);
@@ -199,7 +220,7 @@ imagedestroy($avatarCanvas);
 
 // Display @username in large white text below avatar
 $nameFontSize = 120;
-$nameY = 800;
+$nameY = 880;
 $displayName = '@' . $username;
 
 $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
@@ -219,48 +240,6 @@ if (file_exists($fontPath)) {
     imagestring($canvas, $fontBuiltin, $nameX, $nameY - 20, $displayName, $white);
 }
 
-// Wespee logo badge at bottom (like Cash App)
-$logoText = 'Wespee';
-$logoFontSize = 48;
-$logoPaddingX = 50;
-$logoPaddingY = 20;
-$logoY = 880;
-
-$logoFontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
-if (!file_exists($logoFontPath)) {
-    $logoFontPath = $fontPath;
-}
-
-if (file_exists($logoFontPath)) {
-    $bbox = imagettfbbox($logoFontSize, 0, $logoFontPath, $logoText);
-    $logoTextWidth = $bbox[2] - $bbox[0];
-    $logoTextHeight = $bbox[1] - $bbox[7];
-} else {
-    $logoTextWidth = strlen($logoText) * 20;
-    $logoTextHeight = 30;
-}
-
-$logoBadgeWidth = $logoTextWidth + $logoPaddingX * 2;
-$logoBadgeHeight = $logoTextHeight + $logoPaddingY * 2;
-$logoBadgeX = ($ogWidth - $logoBadgeWidth) / 2;
-
-$logoBadgeRadius = $logoBadgeHeight / 2;
-
-imagefilledellipse($canvas, (int)($logoBadgeX + $logoBadgeRadius), (int)($logoY + $logoBadgeRadius), (int)($logoBadgeRadius * 2), (int)($logoBadgeRadius * 2), $white);
-imagefilledellipse($canvas, (int)($logoBadgeX + $logoBadgeWidth - $logoBadgeRadius), (int)($logoY + $logoBadgeRadius), (int)($logoBadgeRadius * 2), (int)($logoBadgeRadius * 2), $white);
-imagefilledrectangle($canvas, (int)($logoBadgeX + $logoBadgeRadius), (int)$logoY, (int)($logoBadgeX + $logoBadgeWidth - $logoBadgeRadius), (int)($logoY + $logoBadgeHeight), $white);
-
-$wespeeGreen = imagecolorallocate($canvas, 6, 212, 50);
-if (file_exists($logoFontPath)) {
-    $textX = (int)($logoBadgeX + $logoPaddingX);
-    $textY = (int)($logoY + $logoPaddingY + $logoTextHeight - 5);
-    imagettftext($canvas, $logoFontSize, 0, $textX, $textY, $wespeeGreen, $logoFontPath, $logoText);
-} else {
-    $fontBuiltin = 5;
-    $textX = (int)(($ogWidth - $logoTextWidth) / 2);
-    $textY = (int)($logoY + $logoPaddingY);
-    imagestring($canvas, $fontBuiltin, $textX, $textY, $logoText, $wespeeGreen);
-}
 
 header('Content-Type: image/png');
 header('Cache-Control: public, max-age=86400');
