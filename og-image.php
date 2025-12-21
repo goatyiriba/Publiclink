@@ -132,11 +132,11 @@ for ($row = 0; $row < 4; $row++) {
     }
 }
 
-$avatarSize = 380;
+$avatarSize = 480;
 $avatarX = ($ogWidth - $avatarSize) / 2;
-$avatarY = 336;
+$avatarY = 260;
 
-$borderSize = 12;
+$borderSize = 14;
 imagefilledellipse($canvas, (int)($avatarX + $avatarSize / 2), (int)($avatarY + $avatarSize / 2), $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
 
 $avatarCanvas = imagecreatetruecolor($avatarSize, $avatarSize);
@@ -218,28 +218,9 @@ if (!$avatarLoaded) {
 imagecopy($canvas, $avatarCanvas, (int)$avatarX, (int)$avatarY, 0, 0, $avatarSize, $avatarSize);
 imagedestroy($avatarCanvas);
 
-// Draw verification badge at bottom-right of avatar
-$badgeSize = 84;
-$badgeCenterX = (int)($avatarX + $avatarSize - 46);
-$badgeCenterY = (int)($avatarY + $avatarSize - 46);
-
-// White border around badge
-imagefilledellipse($canvas, $badgeCenterX, $badgeCenterY, $badgeSize + 16, $badgeSize + 16, $white);
-// Green badge background
-$verifiedGreen = imagecolorallocate($canvas, 6, 212, 50);
-imagefilledellipse($canvas, $badgeCenterX, $badgeCenterY, $badgeSize, $badgeSize, $verifiedGreen);
-
-// Draw checkmark
-imagesetthickness($canvas, 10);
-$checkX = $badgeCenterX - 14;
-$checkY = $badgeCenterY + 4;
-imageline($canvas, $checkX - 10, $checkY - 6, $checkX, $checkY + 10, $white);
-imageline($canvas, $checkX, $checkY + 10, $checkX + 22, $checkY - 18, $white);
-imagesetthickness($canvas, 1);
-
 // Display full name (Prénom Nom) below avatar
 $nameFontSize = 90;
-$nameY = 780;
+$nameY = 860;
 $displayName = !empty($fullName) ? $fullName : $username;
 
 $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
@@ -247,16 +228,17 @@ if (!file_exists($fontPath)) {
     $fontPath = __DIR__ . '/assets/fonts/Athletics-Medium.otf';
 }
 
+$blackText = imagecolorallocate($canvas, 0, 0, 0);
 if (file_exists($fontPath)) {
     $bbox = imagettfbbox($nameFontSize, 0, $fontPath, $displayName);
     $nameWidth = $bbox[2] - $bbox[0];
     $nameX = (int)(($ogWidth - $nameWidth) / 2 - $bbox[0]);
-    imagettftext($canvas, $nameFontSize, 0, $nameX, $nameY, $white, $fontPath, $displayName);
+    imagettftext($canvas, $nameFontSize, 0, $nameX, $nameY, $blackText, $fontPath, $displayName);
 } else {
     $fontBuiltin = 5;
     $nameWidth = imagefontwidth($fontBuiltin) * strlen($displayName);
     $nameX = (int)(($ogWidth - $nameWidth) / 2);
-    imagestring($canvas, $fontBuiltin, $nameX, $nameY - 20, $displayName, $white);
+    imagestring($canvas, $fontBuiltin, $nameX, $nameY - 20, $displayName, $blackText);
 }
 
 // Badge with @username
@@ -264,7 +246,7 @@ $userBadgeText = '@' . $username;
 $userBadgeFontSize = 52;
 $userBadgePaddingX = 40;
 $userBadgePaddingY = 22;
-$userBadgeY = 826;
+$userBadgeY = 920;
 
 if (file_exists($fontPath)) {
     $bbox = imagettfbbox($userBadgeFontSize, 0, $fontPath, $userBadgeText);
