@@ -300,17 +300,23 @@ if (file_exists($fontPath)) {
     $badgeCenterY = (int)($nameY - 10);
 }
 
-// Draw blue circle background (Facebook blue #1877F2)
-$facebookBlue = imagecolorallocate($canvas, 24, 119, 242);
-imagefilledellipse($canvas, $badgeCenterX, $badgeCenterY, $badgeSize, $badgeSize, $facebookBlue);
-
-// Draw white checkmark
-imagesetthickness($canvas, 8);
-$checkX = $badgeCenterX - 12;
-$checkY = $badgeCenterY + 4;
-imageline($canvas, $checkX - 8, $checkY - 6, $checkX, $checkY + 8, $white);
-imageline($canvas, $checkX, $checkY + 8, $checkX + 18, $checkY - 14, $white);
-imagesetthickness($canvas, 1);
+// Load and draw the green verified badge image
+$badgePath = __DIR__ . '/assets/images/verified-badge.png';
+if (file_exists($badgePath)) {
+    $badgeImg = imagecreatefrompng($badgePath);
+    if ($badgeImg !== false) {
+        imagesavealpha($badgeImg, true);
+        $srcW = imagesx($badgeImg);
+        $srcH = imagesy($badgeImg);
+        
+        // Resize badge to fit
+        $badgeX = (int)($badgeCenterX - $badgeSize / 2);
+        $badgeY = (int)($badgeCenterY - $badgeSize / 2);
+        
+        imagecopyresampled($canvas, $badgeImg, $badgeX, $badgeY, 0, 0, $badgeSize, $badgeSize, $srcW, $srcH);
+        imagedestroy($badgeImg);
+    }
+}
 
 header('Content-Type: image/png');
 header('Cache-Control: public, max-age=86400');
