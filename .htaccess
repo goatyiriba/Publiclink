@@ -1,37 +1,138 @@
-# Enable URL rewriting
+# ============================================
+# Wespee Security & URL Rewriting for Apache
+# ============================================
+
+# Enable RewriteEngine
 RewriteEngine On
 
-# Force HTTPS (uncomment when deployed to production)
-# RewriteCond %{HTTPS} off
-# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Don't rewrite files and directories
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+# ============================================
+# SECURITY: Anti-Scanner & Bot Protection
+# ============================================
 
-# Rewrite og-image URLs to og-image.php
-RewriteRule ^og-image/([a-zA-Z0-9_]+)$ og-image.php?username=$1 [L,QSA]
+# Block known malicious scanners and bots
+RewriteCond %{HTTP_USER_AGENT} (nikto|sqlmap|dirbuster|nmap|masscan|wpscan|acunetix|nessus|openvas|burpsuite|havij|w3af|webscarab|skipfish|grabber|vega|zap|arachni|jbrofuzz|fierce|whatweb|gobuster|dirb|ffuf|nuclei|httpx|subfinder|amass|waybackurls) [NC]
+RewriteRule .* - [F,L]
 
-# Rewrite username URLs to index.php
-RewriteRule ^([a-zA-Z0-9_]+)$ index.php?username=$1 [L,QSA]
+# Block empty user agents (often scanners)
+RewriteCond %{HTTP_USER_AGENT} ^$
+RewriteRule .* - [F,L]
 
-# Security headers
-<IfModule mod_headers.c>
-    # Prevent clickjacking
-    Header set X-Frame-Options "SAMEORIGIN"
+# ============================================
+# SECURITY: Block Path Traversal
+# ============================================
 
-    # XSS Protection
-    Header set X-XSS-Protection "1; mode=block"
+RewriteCond %{QUERY_STRING} (\.\./|\.\.) [NC,OR]
+RewriteCond %{REQUEST_URI} (\.\./|\.\.) [NC]
+RewriteRule .* - [F,L]
 
-    # Prevent MIME sniffing
-    Header set X-Content-Type-Options "nosniff"
+# ============================================
+# SECURITY: Block Sensitive Files
+# ============================================
 
-    # Content Security Policy
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; img-src 'self' data: https:; font-src 'self' data:;"
-</IfModule>
+# Block access to PHP files directly (redirect to wespee.app)
+RewriteCond %{THE_REQUEST} \s/.*\.php[\s?] [NC]
+RewriteCond %{REQUEST_URI} !^/index\.php$ [NC]
+RewriteCond %{REQUEST_URI} !^/og-image\.php$ [NC]
+RewriteCond %{REQUEST_URI} !^/404\.php$ [NC]
+RewriteRule .* https://wespee.app [R=301,L]
 
-# Disable directory browsing
+# Block config.php
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Block router.php
+<Files "router.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Block .env files
+<FilesMatch "^\.env.*$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block hidden files (starting with .)
+<FilesMatch "^\.">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block sensitive file extensions
+<FilesMatch "\.(env|gitignore|htpasswd|ini|log|sql|bak|backup|old|conf|config|sh|bash|md|json|lock)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# ============================================
+# SECURITY: Block CMS Attack Paths
+# ============================================
+
+RewriteCond %{REQUEST_URI} ^/(wp-admin|wp-login|wp-content|wp-includes|wordpress|phpmyadmin|adminer|mysql|phpinfo|server-status|server-info|cgi-bin|admin|administrator) [NC]
+RewriteRule .* - [F,L]
+
+# ============================================
+# SECURITY: Disable Directory Listing
+# ============================================
+
 Options -Indexes
+
+# ============================================
+# SECURITY: Block Direct Directory Access
+# ============================================
+
+# Block access to assets directory listing (but allow files)
+RewriteCond %{REQUEST_URI} ^/assets/?$ [NC]
+RewriteRule .* - [F,L]
+
+# ============================================
+# SECURITY HEADERS
+# ============================================
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; img-src 'self' data: https:; font-src 'self' data:;"
+</IfModule>
 
 # Set default charset
 AddDefaultCharset UTF-8
+
+# ============================================
+# URL REWRITING
+# ============================================
+
+# Serve robots.txt
+RewriteRule ^robots\.txt$ robots.txt [L]
+
+# Serve favicon
+RewriteRule ^favicon\.ico$ assets/images/favicon.ico [L]
+
+# Allow static assets (CSS, JS, images, fonts)
+RewriteCond %{REQUEST_URI} \.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|otf|map)$ [NC]
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule .* - [L]
+
+# Homepage - redirect to wespee.app
+RewriteRule ^$ https://wespee.app [R=301,L]
+
+# OG Image generation route
+RewriteRule ^og-image/([a-zA-Z0-9_]+)$ og-image.php?username=$1 [L,QSA]
+
+# User profile route (clean URLs)
+RewriteRule ^([a-zA-Z0-9_]+)$ index.php?username=$1 [L,QSA]
+
+# Everything else - 404
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* 404.php [L]
