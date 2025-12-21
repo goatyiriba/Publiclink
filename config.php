@@ -33,7 +33,7 @@ define('ANDROID_PLAY_STORE_URL', ''); // TODO: Add Android Play Store URL
 
 // Website Configuration
 define('SITE_NAME', 'Wespee');
-define('SITE_URL', 'https://wespee.me');
+define('SITE_URL', 'https://wespee.app');
 define('SITE_DESCRIPTION', 'Envoyez et recevez de l\'argent facilement avec Wespee');
 
 // Social Media Links
@@ -45,8 +45,8 @@ define('SOCIAL_INSTAGRAM', 'https://instagram.com/wespee');
 define('SOCIAL_TIKTOK', 'https://tiktok.com/@wespee');
 
 // Legal Links
-define('PRIVACY_POLICY_URL', SITE_URL . '/privacy');
-define('TERMS_OF_SERVICE_URL', SITE_URL . '/terms');
+define('PRIVACY_POLICY_URL', 'https://wespee.app/values/politique');
+define('TERMS_OF_SERVICE_URL', 'https://wespee.app/values/termes');
 
 // Branding Colors
 define('COLOR_PRIMARY', '#06D432');

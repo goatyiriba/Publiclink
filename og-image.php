@@ -27,38 +27,39 @@ $avatarUrl = isset($_GET['avatar']) ? $_GET['avatar'] : '';
 $initials = strtoupper(substr($username, 0, 2));
 $fullName = '';
 
-if (empty($avatarUrl)) {
-    $apiUrl = API_BASE_URL . '/public/users/' . urlencode($username);
-    $ctx = stream_context_create([
-        'http' => [
-            'method' => 'GET',
-            'header' => [
-                'Accept: application/json',
-                'x-public-client-id: ' . API_CLIENT_ID,
-                'x-public-client-secret: ' . API_CLIENT_SECRET,
-            ],
-            'timeout' => 5,
+// Always call API to get firstName/lastName for the OG image
+$apiUrl = API_BASE_URL . '/public/users/' . urlencode($username);
+$ctx = stream_context_create([
+    'http' => [
+        'method' => 'GET',
+        'header' => [
+            'Accept: application/json',
+            'x-public-client-id: ' . API_CLIENT_ID,
+            'x-public-client-secret: ' . API_CLIENT_SECRET,
         ],
-        'ssl' => [
-            'verify_peer' => true,
-        ],
-    ]);
-    
-    $response = @file_get_contents($apiUrl, false, $ctx);
-    if ($response !== false) {
-        $data = json_decode($response, true);
-        if (isset($data['profilePictureUrl']) && !empty($data['profilePictureUrl'])) {
-            $avatarUrl = $data['profilePictureUrl'];
-        }
-        if (isset($data['firstName']) || isset($data['lastName'])) {
-            $firstName = $data['firstName'] ?? '';
-            $lastName = $data['lastName'] ?? '';
-            $fullName = trim($firstName . ' ' . $lastName);
-            if (!empty($firstName) && !empty($lastName)) {
-                $initials = strtoupper(substr($firstName, 0, 1) . substr($lastName, 0, 1));
-            } elseif (!empty($firstName)) {
-                $initials = strtoupper(substr($firstName, 0, 2));
-            }
+        'timeout' => 5,
+    ],
+    'ssl' => [
+        'verify_peer' => true,
+    ],
+]);
+
+$response = @file_get_contents($apiUrl, false, $ctx);
+if ($response !== false) {
+    $data = json_decode($response, true);
+    // Only use API avatar if none provided via URL parameter
+    if (empty($avatarUrl) && isset($data['profilePictureUrl']) && !empty($data['profilePictureUrl'])) {
+        $avatarUrl = $data['profilePictureUrl'];
+    }
+    // Always get firstName/lastName for display
+    if (isset($data['firstName']) || isset($data['lastName'])) {
+        $firstName = $data['firstName'] ?? '';
+        $lastName = $data['lastName'] ?? '';
+        $fullName = trim($firstName . ' ' . $lastName);
+        if (!empty($firstName) && !empty($lastName)) {
+            $initials = strtoupper(substr($firstName, 0, 1) . substr($lastName, 0, 1));
+        } elseif (!empty($firstName)) {
+            $initials = strtoupper(substr($firstName, 0, 2));
         }
     }
 }
@@ -229,7 +230,7 @@ if (!file_exists($fontPath)) {
 if (file_exists($fontPath)) {
     $bbox = imagettfbbox($nameFontSize, 0, $fontPath, $displayName);
     $nameWidth = $bbox[2] - $bbox[0];
-    $nameX = ($ogWidth - $nameWidth) / 2 - $bbox[0];
+    $nameX = (int)(($ogWidth - $nameWidth) / 2 - $bbox[0]);
     imagettftext($canvas, $nameFontSize, 0, $nameX, $nameY, $white, $fontPath, $displayName);
 } else {
     $fontBuiltin = 5;

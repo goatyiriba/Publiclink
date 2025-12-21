@@ -304,7 +304,7 @@ $ogImage = SITE_URL . '/og-image/' . $username . $ogImageParams;
 
             <!-- Footer Links -->
             <div class="flex flex-col items-center gap-2 mb-3">
-                <a href="<?php echo PRIVACY_POLICY_URL; ?>" class="text-sm text-gray-700 hover:text-gray-900 transition-colors">Politique de confidentialité</a>
+                <a href="https://wespee.app/values/politique" class="text-sm text-gray-700 hover:text-gray-900 transition-colors">Politique de confidentialité</a>
                 <a href="<?php echo TERMS_OF_SERVICE_URL; ?>" class="text-sm text-gray-700 hover:text-gray-900 transition-colors">Conditions d'utilisation du service</a>
             </div>
 
