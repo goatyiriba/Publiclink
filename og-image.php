@@ -279,7 +279,7 @@ if (!file_exists($fontPath)) {
 }
 
 // Calculate badge size and position
-$badgeSize = 150;
+$badgeSize = 100;
 $badgeGap = 20;
 
 if (file_exists($fontPath)) {
