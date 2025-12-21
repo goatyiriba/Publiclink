@@ -110,32 +110,33 @@ $avatarBg = imagecolorallocate($canvas, 229, 231, 235);
 
 imagefill($canvas, 0, 0, $bgGreen);
 
-$patternSize = 240;
-$patternSpacing = 320;
-for ($row = 0; $row < 5; $row++) {
+$patternSize = 280;
+$patternSpacing = 360;
+$patternAlpha = imagecolorallocatealpha($canvas, 3, 180, 40, 100);
+for ($row = 0; $row < 4; $row++) {
     $offsetX = ($row % 2) * ($patternSpacing / 2);
-    for ($col = 0; $col < 10; $col++) {
+    for ($col = 0; $col < 8; $col++) {
         $x = $offsetX + ($col * $patternSpacing);
-        $y = ($row * $patternSpacing) - 50;
+        $y = ($row * $patternSpacing);
         
         imagesetthickness($canvas, 2);
         
         $cx = $x + $patternSize / 2;
         $cy = $y + $patternSize / 2;
-        $radius = $patternSize / 2 - 30;
+        $radius = $patternSize / 2 - 40;
         
-        imageellipse($canvas, $cx, $cy, $radius * 2, $radius * 2, $patternGreen);
+        imageellipse($canvas, $cx, $cy, $radius * 2, $radius * 2, $patternAlpha);
         
         $innerRadius = $radius * 0.4;
-        imageellipse($canvas, $cx, $cy, $innerRadius * 2, $innerRadius * 2, $patternGreen);
+        imageellipse($canvas, $cx, $cy, $innerRadius * 2, $innerRadius * 2, $patternAlpha);
     }
 }
 
-$avatarSize = 400;
+$avatarSize = 380;
 $avatarX = ($ogWidth - $avatarSize) / 2;
-$avatarY = 240;
+$avatarY = 336;
 
-$borderSize = 10;
+$borderSize = 12;
 imagefilledellipse($canvas, (int)($avatarX + $avatarSize / 2), (int)($avatarY + $avatarSize / 2), $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
 
 $avatarCanvas = imagecreatetruecolor($avatarSize, $avatarSize);
@@ -218,27 +219,27 @@ imagecopy($canvas, $avatarCanvas, (int)$avatarX, (int)$avatarY, 0, 0, $avatarSiz
 imagedestroy($avatarCanvas);
 
 // Draw verification badge at bottom-right of avatar
-$badgeSize = 80;
-$badgeCenterX = (int)($avatarX + $avatarSize - $badgeSize / 3);
-$badgeCenterY = (int)($avatarY + $avatarSize - $badgeSize / 3);
+$badgeSize = 84;
+$badgeCenterX = (int)($avatarX + $avatarSize - 46);
+$badgeCenterY = (int)($avatarY + $avatarSize - 46);
 
 // White border around badge
-imagefilledellipse($canvas, $badgeCenterX, $badgeCenterY, $badgeSize + 12, $badgeSize + 12, $white);
+imagefilledellipse($canvas, $badgeCenterX, $badgeCenterY, $badgeSize + 16, $badgeSize + 16, $white);
 // Green badge background
 $verifiedGreen = imagecolorallocate($canvas, 6, 212, 50);
 imagefilledellipse($canvas, $badgeCenterX, $badgeCenterY, $badgeSize, $badgeSize, $verifiedGreen);
 
 // Draw checkmark
-imagesetthickness($canvas, 8);
-$checkX = $badgeCenterX - 18;
-$checkY = $badgeCenterY + 2;
-imageline($canvas, $checkX - 8, $checkY - 4, $checkX, $checkY + 8, $white);
-imageline($canvas, $checkX, $checkY + 8, $checkX + 20, $checkY - 16, $white);
+imagesetthickness($canvas, 10);
+$checkX = $badgeCenterX - 14;
+$checkY = $badgeCenterY + 4;
+imageline($canvas, $checkX - 10, $checkY - 6, $checkX, $checkY + 10, $white);
+imageline($canvas, $checkX, $checkY + 10, $checkX + 22, $checkY - 18, $white);
 imagesetthickness($canvas, 1);
 
 // Display full name (Prénom Nom) below avatar
-$nameFontSize = 96;
-$nameY = (int)($avatarY + $avatarSize + 100);
+$nameFontSize = 90;
+$nameY = 780;
 $displayName = !empty($fullName) ? $fullName : $username;
 
 $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
@@ -260,10 +261,10 @@ if (file_exists($fontPath)) {
 
 // Badge with @username
 $userBadgeText = '@' . $username;
-$userBadgeFontSize = 56;
-$userBadgePaddingX = 50;
-$userBadgePaddingY = 24;
-$userBadgeY = $nameY + 50;
+$userBadgeFontSize = 52;
+$userBadgePaddingX = 40;
+$userBadgePaddingY = 22;
+$userBadgeY = 826;
 
 if (file_exists($fontPath)) {
     $bbox = imagettfbbox($userBadgeFontSize, 0, $fontPath, $userBadgeText);
