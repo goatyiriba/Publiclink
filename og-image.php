@@ -136,7 +136,7 @@ $avatarX = ($ogWidth - $avatarSize) / 2;
 $avatarY = 180;
 
 $borderSize = 8;
-imagefilledellipse($canvas, $avatarX + $avatarSize / 2, $avatarY + $avatarSize / 2, $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
+imagefilledellipse($canvas, (int)($avatarX + $avatarSize / 2), (int)($avatarY + $avatarSize / 2), $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
 
 $avatarCanvas = imagecreatetruecolor($avatarSize, $avatarSize);
 imagesavealpha($avatarCanvas, true);
@@ -184,7 +184,7 @@ if (!empty($validatedAvatarUrl)) {
 
 if (!$avatarLoaded) {
     $avatarBgColor = imagecolorallocate($avatarCanvas, 229, 231, 235);
-    imagefilledellipse($avatarCanvas, $avatarSize / 2, $avatarSize / 2, $avatarSize, $avatarSize, $avatarBgColor);
+    imagefilledellipse($avatarCanvas, (int)($avatarSize / 2), (int)($avatarSize / 2), $avatarSize, $avatarSize, $avatarBgColor);
     
     $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
     if (!file_exists($fontPath)) {
@@ -208,18 +208,18 @@ if (!$avatarLoaded) {
         $fontBuiltin = 5;
         $textWidth = imagefontwidth($fontBuiltin) * strlen($initials);
         $textHeight = imagefontheight($fontBuiltin);
-        $textX = ($avatarSize - $textWidth) / 2;
-        $textY = ($avatarSize - $textHeight) / 2;
+        $textX = (int)(($avatarSize - $textWidth) / 2);
+        $textY = (int)(($avatarSize - $textHeight) / 2);
         imagestring($avatarCanvas, $fontBuiltin, $textX, $textY, $initials, $initialsColor);
     }
 }
 
-imagecopy($canvas, $avatarCanvas, $avatarX, $avatarY, 0, 0, $avatarSize, $avatarSize);
+imagecopy($canvas, $avatarCanvas, (int)$avatarX, (int)$avatarY, 0, 0, $avatarSize, $avatarSize);
 imagedestroy($avatarCanvas);
 
 // Display full name (Prénom Nom) below avatar
 $nameFontSize = 72;
-$nameY = $avatarY + $avatarSize + 60;
+$nameY = (int)($avatarY + $avatarSize + 60);
 $displayName = !empty($fullName) ? $fullName : $username;
 
 $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
@@ -235,7 +235,7 @@ if (file_exists($fontPath)) {
 } else {
     $fontBuiltin = 5;
     $nameWidth = imagefontwidth($fontBuiltin) * strlen($displayName);
-    $nameX = ($ogWidth - $nameWidth) / 2;
+    $nameX = (int)(($ogWidth - $nameWidth) / 2);
     imagestring($canvas, $fontBuiltin, $nameX, $nameY - 20, $displayName, $white);
 }
 
@@ -271,8 +271,8 @@ if (file_exists($fontPath)) {
     imagettftext($canvas, $badgeFontSize, 0, $textX, $textY, $darkText, $fontPath, $badgeText);
 } else {
     $fontBuiltin = 5;
-    $textX = ($ogWidth - $textWidth) / 2;
-    $textY = $badgeY + $badgePaddingY;
+    $textX = (int)(($ogWidth - $textWidth) / 2);
+    $textY = (int)($badgeY + $badgePaddingY);
     imagestring($canvas, $fontBuiltin, $textX, $textY, $badgeText, $darkText);
 }
 
@@ -288,12 +288,12 @@ if (!file_exists($logoFontPath)) {
 if (file_exists($logoFontPath)) {
     $bbox = imagettfbbox($logoFontSize, 0, $logoFontPath, $logoText);
     $logoWidth = $bbox[2] - $bbox[0];
-    $logoX = ($ogWidth - $logoWidth) / 2 - $bbox[0];
+    $logoX = (int)(($ogWidth - $logoWidth) / 2 - $bbox[0]);
     imagettftext($canvas, $logoFontSize, 0, $logoX, $logoY, $white, $logoFontPath, $logoText);
 } else {
     $fontBuiltin = 5;
     $logoWidth = imagefontwidth($fontBuiltin) * strlen($logoText);
-    $logoX = ($ogWidth - $logoWidth) / 2;
+    $logoX = (int)(($ogWidth - $logoWidth) / 2);
     imagestring($canvas, $fontBuiltin, $logoX, $logoY - 20, $logoText, $white);
 }
 
