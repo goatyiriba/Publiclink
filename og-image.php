@@ -110,30 +110,30 @@ $avatarBg = imagecolorallocate($canvas, 229, 231, 235);
 
 imagefill($canvas, 0, 0, $bgGreen);
 
-$patternSize = 200;
-$patternSpacing = 280;
-for ($row = 0; $row < 6; $row++) {
+$patternSize = 240;
+$patternSpacing = 320;
+for ($row = 0; $row < 5; $row++) {
     $offsetX = ($row % 2) * ($patternSpacing / 2);
-    for ($col = 0; $col < 12; $col++) {
+    for ($col = 0; $col < 10; $col++) {
         $x = $offsetX + ($col * $patternSpacing);
         $y = ($row * $patternSpacing) - 50;
         
-        imagesetthickness($canvas, 3);
+        imagesetthickness($canvas, 2);
         
         $cx = $x + $patternSize / 2;
         $cy = $y + $patternSize / 2;
-        $radius = $patternSize / 2 - 20;
+        $radius = $patternSize / 2 - 30;
         
         imageellipse($canvas, $cx, $cy, $radius * 2, $radius * 2, $patternGreen);
         
-        $innerRadius = $radius * 0.5;
+        $innerRadius = $radius * 0.4;
         imageellipse($canvas, $cx, $cy, $innerRadius * 2, $innerRadius * 2, $patternGreen);
     }
 }
 
-$avatarSize = 360;
+$avatarSize = 400;
 $avatarX = ($ogWidth - $avatarSize) / 2;
-$avatarY = 280;
+$avatarY = 240;
 
 $borderSize = 10;
 imagefilledellipse($canvas, (int)($avatarX + $avatarSize / 2), (int)($avatarY + $avatarSize / 2), $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
@@ -217,9 +217,28 @@ if (!$avatarLoaded) {
 imagecopy($canvas, $avatarCanvas, (int)$avatarX, (int)$avatarY, 0, 0, $avatarSize, $avatarSize);
 imagedestroy($avatarCanvas);
 
+// Draw verification badge at bottom-right of avatar
+$badgeSize = 80;
+$badgeCenterX = (int)($avatarX + $avatarSize - $badgeSize / 3);
+$badgeCenterY = (int)($avatarY + $avatarSize - $badgeSize / 3);
+
+// White border around badge
+imagefilledellipse($canvas, $badgeCenterX, $badgeCenterY, $badgeSize + 12, $badgeSize + 12, $white);
+// Green badge background
+$verifiedGreen = imagecolorallocate($canvas, 6, 212, 50);
+imagefilledellipse($canvas, $badgeCenterX, $badgeCenterY, $badgeSize, $badgeSize, $verifiedGreen);
+
+// Draw checkmark
+imagesetthickness($canvas, 8);
+$checkX = $badgeCenterX - 18;
+$checkY = $badgeCenterY + 2;
+imageline($canvas, $checkX - 8, $checkY - 4, $checkX, $checkY + 8, $white);
+imageline($canvas, $checkX, $checkY + 8, $checkX + 20, $checkY - 16, $white);
+imagesetthickness($canvas, 1);
+
 // Display full name (Prénom Nom) below avatar
-$nameFontSize = 84;
-$nameY = (int)($avatarY + $avatarSize + 120);
+$nameFontSize = 96;
+$nameY = (int)($avatarY + $avatarSize + 100);
 $displayName = !empty($fullName) ? $fullName : $username;
 
 $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
@@ -240,61 +259,40 @@ if (file_exists($fontPath)) {
 }
 
 // Badge with @username
-$badgeText = '@' . $username;
-$badgeFontSize = 60;
-$badgePaddingX = 56;
-$badgePaddingY = 28;
-$badgeY = $nameY + 48;
+$userBadgeText = '@' . $username;
+$userBadgeFontSize = 56;
+$userBadgePaddingX = 50;
+$userBadgePaddingY = 24;
+$userBadgeY = $nameY + 50;
 
 if (file_exists($fontPath)) {
-    $bbox = imagettfbbox($badgeFontSize, 0, $fontPath, $badgeText);
+    $bbox = imagettfbbox($userBadgeFontSize, 0, $fontPath, $userBadgeText);
     $textWidth = $bbox[2] - $bbox[0];
     $textHeight = $bbox[1] - $bbox[7];
 } else {
-    $textWidth = strlen($badgeText) * 20;
+    $textWidth = strlen($userBadgeText) * 20;
     $textHeight = 30;
 }
 
-$badgeWidth = $textWidth + $badgePaddingX * 2;
-$badgeHeight = $textHeight + $badgePaddingY * 2;
-$badgeX = ($ogWidth - $badgeWidth) / 2;
+$userBadgeWidth = $textWidth + $userBadgePaddingX * 2;
+$userBadgeHeight = $textHeight + $userBadgePaddingY * 2;
+$userBadgeX = ($ogWidth - $userBadgeWidth) / 2;
 
-$badgeRadius = $badgeHeight / 2;
+$userBadgeRadius = $userBadgeHeight / 2;
 
-imagefilledellipse($canvas, (int)($badgeX + $badgeRadius), (int)($badgeY + $badgeRadius), (int)($badgeRadius * 2), (int)($badgeRadius * 2), $lightGreen);
-imagefilledellipse($canvas, (int)($badgeX + $badgeWidth - $badgeRadius), (int)($badgeY + $badgeRadius), (int)($badgeRadius * 2), (int)($badgeRadius * 2), $lightGreen);
-imagefilledrectangle($canvas, (int)($badgeX + $badgeRadius), (int)$badgeY, (int)($badgeX + $badgeWidth - $badgeRadius), (int)($badgeY + $badgeHeight), $lightGreen);
+imagefilledellipse($canvas, (int)($userBadgeX + $userBadgeRadius), (int)($userBadgeY + $userBadgeRadius), (int)($userBadgeRadius * 2), (int)($userBadgeRadius * 2), $lightGreen);
+imagefilledellipse($canvas, (int)($userBadgeX + $userBadgeWidth - $userBadgeRadius), (int)($userBadgeY + $userBadgeRadius), (int)($userBadgeRadius * 2), (int)($userBadgeRadius * 2), $lightGreen);
+imagefilledrectangle($canvas, (int)($userBadgeX + $userBadgeRadius), (int)$userBadgeY, (int)($userBadgeX + $userBadgeWidth - $userBadgeRadius), (int)($userBadgeY + $userBadgeHeight), $lightGreen);
 
 if (file_exists($fontPath)) {
-    $textX = (int)($badgeX + $badgePaddingX);
-    $textY = (int)($badgeY + $badgePaddingY + $textHeight - 5);
-    imagettftext($canvas, $badgeFontSize, 0, $textX, $textY, $darkText, $fontPath, $badgeText);
+    $textX = (int)($userBadgeX + $userBadgePaddingX);
+    $textY = (int)($userBadgeY + $userBadgePaddingY + $textHeight - 5);
+    imagettftext($canvas, $userBadgeFontSize, 0, $textX, $textY, $darkText, $fontPath, $userBadgeText);
 } else {
     $fontBuiltin = 5;
     $textX = (int)(($ogWidth - $textWidth) / 2);
-    $textY = (int)($badgeY + $badgePaddingY);
-    imagestring($canvas, $fontBuiltin, $textX, $textY, $badgeText, $darkText);
-}
-
-$logoText = 'Wespee';
-$logoFontSize = 68;
-$logoY = $badgeY + $badgeHeight + 96;
-
-$logoFontPath = __DIR__ . '/assets/fonts/Athletics-ExtraBold.otf';
-if (!file_exists($logoFontPath)) {
-    $logoFontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
-}
-
-if (file_exists($logoFontPath)) {
-    $bbox = imagettfbbox($logoFontSize, 0, $logoFontPath, $logoText);
-    $logoWidth = $bbox[2] - $bbox[0];
-    $logoX = (int)(($ogWidth - $logoWidth) / 2 - $bbox[0]);
-    imagettftext($canvas, $logoFontSize, 0, $logoX, $logoY, $white, $logoFontPath, $logoText);
-} else {
-    $fontBuiltin = 5;
-    $logoWidth = imagefontwidth($fontBuiltin) * strlen($logoText);
-    $logoX = (int)(($ogWidth - $logoWidth) / 2);
-    imagestring($canvas, $fontBuiltin, $logoX, $logoY - 20, $logoText, $white);
+    $textY = (int)($userBadgeY + $userBadgePaddingY);
+    imagestring($canvas, $fontBuiltin, $textX, $textY, $userBadgeText, $darkText);
 }
 
 header('Content-Type: image/png');
