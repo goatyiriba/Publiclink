@@ -10,6 +10,8 @@ ini_set('log_errors', 1);
 
 // Security headers for image endpoint
 header('X-Content-Type-Options: nosniff');
+header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
 
 require_once 'config.php';
 
