@@ -228,18 +228,41 @@ if (!file_exists($fontPath)) {
     $fontPath = __DIR__ . '/assets/fonts/Athletics-Medium.otf';
 }
 
+// Calculate badge size and position
+$badgeSize = 70;
+$badgeGap = 20;
+
 if (file_exists($fontPath)) {
     $bbox = imagettfbbox($nameFontSize, 0, $fontPath, $displayName);
     $nameWidth = $bbox[2] - $bbox[0];
-    $nameX = (int)(($ogWidth - $nameWidth) / 2 - $bbox[0]);
+    $totalWidth = $nameWidth + $badgeGap + $badgeSize;
+    $nameX = (int)(($ogWidth - $totalWidth) / 2 - $bbox[0]);
     imagettftext($canvas, $nameFontSize, 0, $nameX, $nameY, $white, $fontPath, $displayName);
+    
+    // Draw Facebook-style blue verified badge
+    $badgeCenterX = (int)($nameX + $nameWidth + $badgeGap + $badgeSize / 2);
+    $badgeCenterY = (int)($nameY - $nameFontSize / 2 + 10);
 } else {
     $fontBuiltin = 5;
     $nameWidth = imagefontwidth($fontBuiltin) * strlen($displayName);
     $nameX = (int)(($ogWidth - $nameWidth) / 2);
     imagestring($canvas, $fontBuiltin, $nameX, $nameY - 20, $displayName, $white);
+    
+    $badgeCenterX = (int)($nameX + $nameWidth + $badgeGap + $badgeSize / 2);
+    $badgeCenterY = (int)($nameY - 10);
 }
 
+// Draw blue circle background (Facebook blue #1877F2)
+$facebookBlue = imagecolorallocate($canvas, 24, 119, 242);
+imagefilledellipse($canvas, $badgeCenterX, $badgeCenterY, $badgeSize, $badgeSize, $facebookBlue);
+
+// Draw white checkmark
+imagesetthickness($canvas, 8);
+$checkX = $badgeCenterX - 12;
+$checkY = $badgeCenterY + 4;
+imageline($canvas, $checkX - 8, $checkY - 6, $checkX, $checkY + 8, $white);
+imageline($canvas, $checkX, $checkY + 8, $checkX + 18, $checkY - 14, $white);
+imagesetthickness($canvas, 1);
 
 header('Content-Type: image/png');
 header('Cache-Control: public, max-age=86400');
