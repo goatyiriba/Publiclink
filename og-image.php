@@ -111,11 +111,11 @@ $avatarBg = imagecolorallocate($canvas, 229, 231, 235);
 imagefill($canvas, 0, 0, $bgGreen);
 
 
-$avatarSize = 340;
+$avatarSize = 420;
 $avatarX = ($ogWidth - $avatarSize) / 2;
-$avatarY = 280;
+$avatarY = 240;
 
-$borderSize = 10;
+$borderSize = 12;
 imagefilledellipse($canvas, (int)($avatarX + $avatarSize / 2), (int)($avatarY + $avatarSize / 2), $avatarSize + $borderSize * 2, $avatarSize + $borderSize * 2, $white);
 
 $avatarCanvas = imagecreatetruecolor($avatarSize, $avatarSize);
@@ -197,10 +197,10 @@ if (!$avatarLoaded) {
 imagecopy($canvas, $avatarCanvas, (int)$avatarX, (int)$avatarY, 0, 0, $avatarSize, $avatarSize);
 imagedestroy($avatarCanvas);
 
-// Display $username in large white text below avatar (Cash App style)
-$nameFontSize = 100;
-$nameY = 760;
-$displayName = '$' . $username;
+// Display @username in large white text below avatar
+$nameFontSize = 120;
+$nameY = 800;
+$displayName = '@' . $username;
 
 $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
 if (!file_exists($fontPath)) {
