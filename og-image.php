@@ -44,9 +44,14 @@ $ctx = stream_context_create([
     ],
 ]);
 
+$userExists = false;
 $response = @file_get_contents($apiUrl, false, $ctx);
 if ($response !== false) {
     $data = json_decode($response, true);
+    // Check if user exists (API returns valid user data)
+    if (isset($data['username']) || isset($data['firstName']) || isset($data['id'])) {
+        $userExists = true;
+    }
     // Only use API avatar if none provided via URL parameter
     if (empty($avatarUrl) && isset($data['profilePictureUrl']) && !empty($data['profilePictureUrl'])) {
         $avatarUrl = $data['profilePictureUrl'];
@@ -130,6 +135,49 @@ if (file_exists($watermarkFontPath)) {
             imagettftext($canvas, $watermarkFontSize, -15, (int)$x, (int)$y, $watermarkColor, $watermarkFontPath, $watermarkText);
         }
     }
+}
+
+// If user doesn't exist, show "Utilisateur n'existe pas" message
+if (!$userExists) {
+    $notFoundText = "Utilisateur n'existe pas";
+    $notFoundFontSize = 80;
+    $fontPath = __DIR__ . '/assets/fonts/Athletics-Bold.otf';
+    if (!file_exists($fontPath)) {
+        $fontPath = __DIR__ . '/assets/fonts/Athletics-Medium.otf';
+    }
+    
+    // Draw a ghost/question mark icon (circle with ?)
+    $iconSize = 300;
+    $iconX = $ogWidth / 2;
+    $iconY = 400;
+    $iconBg = imagecolorallocate($canvas, 229, 231, 235);
+    imagefilledellipse($canvas, (int)$iconX, (int)$iconY, $iconSize, $iconSize, $white);
+    imagefilledellipse($canvas, (int)$iconX, (int)$iconY, $iconSize - 20, $iconSize - 20, $iconBg);
+    
+    // Draw ? in the circle
+    $questionColor = imagecolorallocate($canvas, 107, 114, 128);
+    if (file_exists($fontPath)) {
+        $bbox = imagettfbbox(120, 0, $fontPath, '?');
+        $textWidth = $bbox[2] - $bbox[0];
+        $textX = (int)($iconX - $textWidth / 2 - $bbox[0]);
+        $textY = (int)($iconY + 45);
+        imagettftext($canvas, 120, 0, $textX, $textY, $questionColor, $fontPath, '?');
+    }
+    
+    // Draw the message below
+    if (file_exists($fontPath)) {
+        $bbox = imagettfbbox($notFoundFontSize, 0, $fontPath, $notFoundText);
+        $textWidth = $bbox[2] - $bbox[0];
+        $textX = (int)(($ogWidth - $textWidth) / 2 - $bbox[0]);
+        $textY = 750;
+        imagettftext($canvas, $notFoundFontSize, 0, $textX, $textY, $white, $fontPath, $notFoundText);
+    }
+    
+    header('Content-Type: image/png');
+    header('Cache-Control: public, max-age=3600');
+    imagepng($canvas, null, 6);
+    imagedestroy($canvas);
+    exit;
 }
 
 $avatarSize = 480;

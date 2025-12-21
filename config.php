@@ -24,8 +24,8 @@ if (file_exists($envFile)) {
 
 // API Configuration - Load from environment variables
 define('API_BASE_URL', getenv('API_BASE_URL') ?: 'https://recorder-wespee-api.bicentsafe.com/api/v1');
-define('API_CLIENT_ID', getenv('x-public-client-id') ?: '');
-define('API_CLIENT_SECRET', getenv('x-public-client-secret') ?: '');
+define('API_CLIENT_ID', getenv('API_CLIENT_ID') ?: getenv('x_public_client_id') ?: '');
+define('API_CLIENT_SECRET', getenv('API_CLIENT_SECRET') ?: getenv('x_public_client_secret') ?: '');
 
 // App Store URLs (to be configured)
 define('IOS_APP_STORE_URL', ''); // TODO: Add iOS App Store URL
